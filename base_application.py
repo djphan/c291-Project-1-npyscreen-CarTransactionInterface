@@ -65,7 +65,8 @@ class BaseApplication:
         Contains only test code in BaseApplication.
         Subclasses of BaseApplication should override this.
         """
-        print("NCHARS: %d" % len(user_input))
-        print(user_input)
+        print("User input was %d.\nDoing nothing..." % user_input)
+        print(self.curs)
+
 
 

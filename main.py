@@ -5,10 +5,10 @@ from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
-from base_application import BaseApplication
 
 main_menu = \
-"""MAIN MENU: 
+"""
+MAIN MENU: 
 (1) New Vehicle Registration
 (2) Auto Transaction
 (3) Driver Licence Registration
@@ -23,17 +23,16 @@ Bad input.
 Please enter a number from 1 to 5 to select an application.
 """
 welcome_msg = \
-"""WELCOME TO CMPUT 291 PROJECT 1\nPlease enter your Oracle username:"""
+"""WELCOME TO CMPUT 291 PROJECT 1\nPlease enter your Oracle username: """
 choice_set = {'1', '2', '3', '4', '5', 'q', 'Q', 'quit', 'Quit', 'QUIT'}
 quit_set = {'q', 'Q', 'quit', 'Quit', 'QUIT'}
 
 def main():
-    # print(welcome_msg, end='')
-    # username = input()
-    # password = getpass.getpass()
-    # con = cx_Oracle.connect("%s/%s@gwynne.cs.ualberta.ca:1521/CRS"
-    #                         % (username, password))
-    # curs = con.cursor()
+    username = input(welcome_msg)
+    password = getpass.getpass()
+    con = cx_Oracle.connect("%s/%s@gwynne.cs.ualberta.ca:1521/CRS"
+                            % (username, password))
+    curs = con.cursor()
     curs = None
 
     while 1:
