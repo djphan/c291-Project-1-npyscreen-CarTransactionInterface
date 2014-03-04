@@ -1,8 +1,11 @@
+import getpass
+import cx_Oracle
 from new_vehicle_registration import NewVehicleRegistration
 from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
+from base_application import BaseApplication
 
 main_menu = \
 """MAIN MENU: 
@@ -19,12 +22,21 @@ bad_input = \
 Bad input.
 Please enter a number from 1 to 5 to select an application.
 """
+welcome_msg = \
+"""WELCOME TO CMPUT 291 PROJECT 1\nPlease enter your Oracle username:"""
 choice_set = {'1', '2', '3', '4', '5', 'q', 'Q', 'quit', 'Quit', 'QUIT'}
 quit_set = {'q', 'Q', 'quit', 'Quit', 'QUIT'}
 
 def main():
-    while 1:
+    # print(welcome_msg, end='')
+    # username = input()
+    # password = getpass.getpass()
+    # con = cx_Oracle.connect("%s/%s@gwynne.cs.ualberta.ca:1521/CRS"
+    #                         % (username, password))
+    # curs = con.cursor()
+    curs = None
 
+    while 1:
         choice = None
         while choice not in choice_set:
             choice = input(main_menu)
@@ -34,15 +46,23 @@ def main():
         if choice in quit_set:
             raise SystemExit
 
-        app = [NewVehicleRegistration(),
-               AutoTransaction(),
-               DriverLicenceRegistration(),
-               ViolationRecord(),
-               SearchEngine()
+        app = [NewVehicleRegistration,
+               AutoTransaction,
+               DriverLicenceRegistration,
+               ViolationRecord,
+               SearchEngine
               ][int(choice)-1]
 
-        app.run()
+        app(curs).run()
 
+    con.close()
+
+def test():
+    app = BaseApplication(None)
+    app.run()
+    print("DONE")
+
+# test()
 if __name__ == "__main__":
     main()
 
