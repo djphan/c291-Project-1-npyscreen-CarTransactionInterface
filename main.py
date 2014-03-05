@@ -22,8 +22,7 @@ Please enter your selection (1-5):
 bad_input = \
 """
 Bad input.
-Please enter a number from 1 to 5 to select an application.
-"""
+Please enter a number from 1 to 5 to select an application."""
 welcome_msg = \
 """WELCOME TO CMPUT 291 PROJECT 1\nPlease enter your Oracle username: """
 choice_set = {'1', '2', '3', '4', '5', 'q', 'Q', 'quit', 'Quit', 'QUIT'}
@@ -32,10 +31,12 @@ quit_set = {'q', 'Q', 'quit', 'Quit', 'QUIT'}
 def main():
     username = input(welcome_msg)
     password = getpass.getpass()
-    con = cx_Oracle.connect("%s/%s@gwynne.cs.ualberta.ca:1521/CRS"
-                            % (username, password))
+    host = input("Enter host: [default: @gwynne.cs.ualberta.ca:1521/CRS]\n> @")
+    host = "gwynne.cs.ualberta.ca:1521/CRS" if not host else host
+
+    con = cx_Oracle.connect("%s/%s@%s" % (username, password, host))
     curs = con.cursor()
-    
+
     while 1:
         choice = None
         while choice not in choice_set:
@@ -57,12 +58,6 @@ def main():
 
     con.close()
 
-def test():
-    app = BaseApplication(None)
-    app.run()
-    print("DONE")
-
-# test()
 if __name__ == "__main__":
     main()
 
