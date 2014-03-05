@@ -1,15 +1,14 @@
-from base_application import BaseApplication
+import npyscreen
 
-class AutoTransaction(BaseApplication):
+class AutoTransaction(npyscreen.ActionForm):
+    def create(self):
+        self.seller = self.add(npyscreen.TitleText, name='Serial no:')
+        self.buyer = self.add(npyscreen.TitleText, name='Maker:')
+        self.date = self.add(npyscreen.TitleDateCombo, name='Date:')
+        self.price = self.add(npyscreen.TitleText, name='Year:')
 
-    def __init__(self, cursor):
-        super().__init__(cursor)
+    def on_ok(self):
+        self.parentApp.switchFormPrevious()
 
-        # self.welcome_msg =
-        # self.prompt_msg = 
-
-    # def validate(self, user_input):
-    #     pass
-
-    # def process_input(self, user_input):
-    #     pass
+    def on_cancel(self):
+        self.parentApp.switchFormPrevious()

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import getpass
+import npyscreen
 import cx_Oracle
 from new_vehicle_registration import NewVehicleRegistration
 from auto_transaction import AutoTransaction
@@ -28,36 +28,82 @@ welcome_msg = \
 choice_set = {'1', '2', '3', '4', '5', 'q', 'Q', 'quit', 'Quit', 'QUIT'}
 quit_set = {'q', 'Q', 'quit', 'Quit', 'QUIT'}
 
-def main():
-    username = input(welcome_msg)
-    password = getpass.getpass()
-    host = input("Enter host: [default: @gwynne.cs.ualberta.ca:1521/CRS]\n> @")
-    host = "gwynne.cs.ualberta.ca:1521/CRS" if not host else host
+class Database:
+    def __init__(self, connect_str):
+        self.connnection = cx_Oracle.connect(connect_str)
+        self.cursor = self.connection.cursor()
+        
+class MyApplication(npyscreen.NPSAppManaged):
+    def onStart(self):
 
-    con = cx_Oracle.connect("%s/%s@%s" % (username, password, host))
-    curs = con.cursor()
+        self.addForm('MAIN', MainMenu, name="MAIN MENU")
+        self.addForm('MAIN_POPUP', MainMenuPopup,
+                     name="Connect to Oracle")
 
-    while 1:
-        choice = None
-        while choice not in choice_set:
-            choice = input(main_menu)
-            if choice not in choice_set:
-                print(bad_input)
+        self.addForm('NEWVEHICLEREGISTRATION',
+                     NewVehicleRegistration, name='New Vehicle Registration')
+        self.addForm('AUTOTRANSACTION',
+                     AutoTransaction, name='Auto Transaction')
+        self.addForm('DRIVERLICENCEREGISTRATION',
+                     DriverLicenceRegistration, name='Driver Licence Registration')
+        self.addForm('VIOLATIONRECORD',
+                     ViolationRecord, name='Violation Record')
+        self.addForm('SEARCHENGINE',
+                     SearchEngine, name='Search Engine')
 
-        if choice in quit_set:
-            raise SystemExit
+class MainMenuPopup(npyscreen.ActionPopup):
+    def create(self):
+        self.username = self.add(npyscreen.TitleText, name="Oracle user:")
+        self.password = self.add(npyscreen.TitlePassword, name="Password:")
+        self.host = self.add(npyscreen.TitleText, name="Host:")
+        self.host.value = "@gwynne.cs.ualberta.ca:1521/CRS"
 
-        app = [NewVehicleRegistration,
-               AutoTransaction,
-               DriverLicenceRegistration,
-               ViolationRecord,
-               SearchEngine
-              ][int(choice)-1]
+    def on_ok(self):
+        self.parentApp.switchFormPrevious()
+        ## UNTESTED ##
+        self.db = Database("%s/%s@%s" % (self.username.value,
+                                         self.password.value,
+                                         self.host.value))
 
-        app(curs).run()
+    def on_cancel(self):
+        self.parentApp.switchFormPrevious()
 
-    con.close()
+        
+
+class MainMenu(npyscreen.FormBaseNew):
+    def create(self):
+        def buttonpress0(*args):
+            self.parentApp.switchForm("MAIN_POPUP")
+        def buttonpress1(*args):
+            self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
+        def buttonpress2(*args):
+            self.parentApp.switchForm("AUTOTRANSACTION")
+        def buttonpress3(*args):
+            self.parentApp.switchForm("DRIVERLICENCEREGISTRATION")
+        def buttonpress4(*args):
+            self.parentApp.switchForm("VIOLATIONRECORD")
+        def buttonpress5(*args):
+            self.parentApp.switchForm("SEARCHENGINE")
+        def buttonpress6(*args):
+            self.parentApp.setNextForm(None)
+            self.editing = False
+
+        self.button0 = self.add(npyscreen.ButtonPress, name="Oracle Login", rely=2)
+        self.button0.whenPressed = buttonpress0
+        self.button1 = self.add(npyscreen.ButtonPress, name="New Vehicle Registration", rely=4)
+        self.button1.whenPressed = buttonpress1
+        self.button2 = self.add(npyscreen.ButtonPress, name="Auto Transaction", rely=5)
+        self.button2.whenPressed = buttonpress2
+        self.button3 = self.add(npyscreen.ButtonPress, name="Driver Licence Registration", rely=6)
+        self.button3.whenPressed = buttonpress3
+        self.button4 = self.add(npyscreen.ButtonPress, name="Violation Record", rely=7)
+        self.button4.whenPressed = buttonpress4
+        self.button5 = self.add(npyscreen.ButtonPress, name="Search Engine", rely=8)
+        self.button5.whenPressed = buttonpress5
+        self.button6 = self.add(npyscreen.ButtonPress, name="Quit", rely=10)
+        self.button6.whenPressed = buttonpress6
 
 if __name__ == "__main__":
-    main()
-
+    app = MyApplication()
+    app.run()
+    print('done')

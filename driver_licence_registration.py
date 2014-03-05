@@ -1,15 +1,16 @@
-from base_application import BaseApplication
+import npyscreen
 
-class DriverLicenceRegistration(BaseApplication):
+class DriverLicenceRegistration(npyscreen.ActionForm):
+    def create(self):
+        self.serial_no = self.add(npyscreen.TitleText, name='Serial no:')
+        self.maker = self.add(npyscreen.TitleText, name='Maker:')
+        self.model = self.add(npyscreen.TitleText, name='Model:')
+        self.year = self.add(npyscreen.TitleText, name='Year:')
+        self.color = self.add(npyscreen.TitleText, name='Color:')
+        self.type_id = self.add(npyscreen.TitleText, name='Type id:')
 
-    def __init__(self, cursor):
-        super().__init__(cursor)
+    def on_ok(self):
+        self.parentApp.switchFormPrevious()
 
-        # self.welcome_msg =
-        # self.prompt_msg = 
-
-    # def validate(self, user_input):
-    #     pass
-
-    # def process_input(self, user_input):
-    #     pass
+    def on_cancel(self):
+        self.parentApp.switchFormPrevious()
