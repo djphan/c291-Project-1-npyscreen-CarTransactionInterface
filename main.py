@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 import getpass
 import cx_Oracle
 from new_vehicle_registration import NewVehicleRegistration
@@ -33,8 +35,7 @@ def main():
     con = cx_Oracle.connect("%s/%s@gwynne.cs.ualberta.ca:1521/CRS"
                             % (username, password))
     curs = con.cursor()
-    curs = None
-
+    
     while 1:
         choice = None
         while choice not in choice_set:

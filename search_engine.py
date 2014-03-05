@@ -8,8 +8,8 @@ class SearchEngine(BaseApplication):
         # self.welcome_msg =
         # self.prompt_msg = 
 
-    def validate(self, user_input):
-        pass
+    # def validate(self, user_input):
+    #     pass
 
-    def process_input(self, user_input):
-        pass
+    # def process_input(self, user_input):
+    #     pass
