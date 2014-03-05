@@ -7,31 +7,8 @@ from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
-
-main_menu = \
-"""
-MAIN MENU: 
-(1) New Vehicle Registration
-(2) Auto Transaction
-(3) Driver Licence Registration
-(4) Violation Record
-(5) Search Engine
-
-Please enter your selection (1-5):
-> """
-bad_input = \
-"""
-Bad input.
-Please enter a number from 1 to 5 to select an application."""
-welcome_msg = \
-"""WELCOME TO CMPUT 291 PROJECT 1\nPlease enter your Oracle username: """
-choice_set = {'1', '2', '3', '4', '5', 'q', 'Q', 'quit', 'Quit', 'QUIT'}
-quit_set = {'q', 'Q', 'quit', 'Quit', 'QUIT'}
-
-class Database:
-    def __init__(self, connect_str):
-        self.connnection = cx_Oracle.connect(connect_str)
-        self.cursor = self.connection.cursor()
+from database import Database
+    
         
 class MyApplication(npyscreen.NPSAppManaged):
     def onStart(self):
@@ -50,6 +27,7 @@ class MyApplication(npyscreen.NPSAppManaged):
                      ViolationRecord, name='Violation Record')
         self.addForm('SEARCHENGINE',
                      SearchEngine, name='Search Engine')
+    
 
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
@@ -59,11 +37,12 @@ class MainMenuPopup(npyscreen.ActionPopup):
         self.host.value = "@gwynne.cs.ualberta.ca:1521/CRS"
 
     def on_ok(self):
-        self.parentApp.switchFormPrevious()
         ## UNTESTED ##
-        self.db = Database("%s/%s@%s" % (self.username.value,
+        self.parentApp.db = Database("%s/%s%s" % (self.username.value,
                                          self.password.value,
                                          self.host.value))
+
+        self.parentApp.switchFormPrevious()
 
     def on_cancel(self):
         self.parentApp.switchFormPrevious()
