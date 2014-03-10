@@ -2,6 +2,7 @@
 
 import npyscreen
 import cx_Oracle
+import pdb
 from new_vehicle_registration import NewVehicleRegistration
 from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
