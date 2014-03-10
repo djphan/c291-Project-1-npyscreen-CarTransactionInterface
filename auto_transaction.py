@@ -97,7 +97,7 @@ class AutoTransaction(npyscreen.ActionForm):
         
         # if all of the above succeeded:
         # increment next t_id
-        self.t_id.value = str(int(self.t_id.value) + 1)
+        # self.t_id.value = str(int(self.t_id.value) + 1)
 
         # Add option to do another transaction in this form???
         npyscreen.notify_confirm("Success!", title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)

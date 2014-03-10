@@ -19,23 +19,24 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
 
     def on_ok(self):
         # call db method on provided data
-        self.parentApp.switchFormPrevious()
+
         
         # attempt to open the image file
         try:
             image_file = open(self.photo.value, 'rb')
-        except cx_Oracle.DatabaseError as exc:
+        except IOError as exc:
             error, = exc.args
             npyscreen.notify_confirm(error.message, 
                                             editw=1,
                                             title='Image Load failure')
 
             # change this so it takes you back to filled form on fail
+            self.editing = True
             return
 
         # if we are succesfull in opening, prep image for db entry
         image = image_file.read()
-        self.parentApp.db.cursor.setinputsizes(image=cx_Oracle.BLOB)
+        # self.parentApp.db.cursor.setinputsizes(image=cx_Oracle.BLOB)
         image_file.close() 
         
         # prep and send db statement
@@ -43,19 +44,27 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
                                             sin, class, photo,
                                             issuing_date,
                                             expiring_date)
-                                            values (:licence_no,
+                                            values (:licence_no, :sin,
                                             :class, :photo,
                                             :issuing_date,
                                             :expiring_date)"""
-        entry_dict = {'licence_no':self.licence_no, 
-                                            'sin':self.sin,
-                                            'class':self.licence_class,
-                                            'photo':image,
-                                            'issuing_date':
-                                            self.issuing_date,
-                                            'expiring_date':
-                                            self.expiring_date}
-        self.parentApp.db.cursor.execute(insert, entry_dict) 
+        entry_dict = {'licence_no':str(self.licence_no.value), 
+                      'sin':str(self.sin.value),
+                      'class':str(self.licence_class.value),
+                      'photo':image,
+                      'issuing_date':
+                          self.issuing_date.value.strftime("%d-%b-%y"),
+                      'expiring_date':
+                          self.expiring_date.value.strftime("%d-%b-%y")}
+        error = self.parentApp.db.insert(entry_dict, insert)
+        # error handling
+        if error:
+            # don't return to main menu
+            self.editing = True
+            # print error to screen
+            npyscreen.notify_confirm(str(error), title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return
+        self.parentApp.switchFormPrevious()
                                                 
     def on_cancel(self):
         self.parentApp.switchFormPrevious()

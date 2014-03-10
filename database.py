@@ -11,11 +11,16 @@ class Database:
             npyscreen.notify_confirm(error.message, editw=1,
                                                     title='Login failure')
 
+            # PUT IN NULL PROCESSING
+            # if self.entries[field] in {'', 'null'}: # If the entry is blank fill in null
+            #     self.entries[field] = 'null'
+
     def insert(self, values_dict, prepare_statement):
-        self.cursor.prepare(prepare_statement) # prepare cursor
+        self.cursor.prepare(prepare_statement.upper()) # prepare cursor
         try:
             # subsitute dictionary values and execute SQL
-            self.cursor.execute(None, values_dict) 
+            self.cursor.setinputsizes(image=cx_Oracle.BLOB)
+            self.cursor.execute(None, {i:values_dict[i].upper() for i in values_dict}) 
         except cx_Oracle.DatabaseError as exc:
             # return error arguments if an error occurs, else return None
             error = exc.args[0]
