@@ -13,56 +13,81 @@ from database import Database
 class MyApplication(npyscreen.NPSAppManaged):
     def onStart(self):
 
-        self.addForm('MAIN', MainMenu, name="MAIN MENU")
+        self.addFormClass('MAIN', MainMenu, name="MAIN MENU")
         self.addForm('MAIN_POPUP', MainMenuPopup,
                      name="Connect to Oracle")
 
-        self.addForm('NEWVEHICLEREGISTRATION',
+        self.addFormClass('NEWVEHICLEREGISTRATION',
                      NewVehicleRegistration, name='New Vehicle Registration')
-        self.addForm('AUTOTRANSACTION',
+        self.addFormClass('AUTOTRANSACTION',
                      AutoTransaction, name='Auto Transaction')
-        self.addForm('DRIVERLICENCEREGISTRATION',
+        self.addFormClass('DRIVERLICENCEREGISTRATION',
                      DriverLicenceRegistration, name='Driver Licence Registration')
-        self.addForm('VIOLATIONRECORD',
+        self.addFormClass('VIOLATIONRECORD',
                      ViolationRecord, name='Violation Record')
-        self.addForm('SEARCHENGINE',
+        self.addFormClass('SEARCHENGINE',
                      SearchEngine, name='Search Engine')
-    
+        self.db = None
 
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
         self.username = self.add(npyscreen.TitleText, name="Oracle user:")
+        self.username.value = ''
         self.password = self.add(npyscreen.TitlePassword, name="Password:")
+        self.password.value = ''
         self.host = self.add(npyscreen.TitleText, name="Host:")
         self.host.value = "@gwynne.cs.ualberta.ca:1521/CRS"
 
     def on_ok(self):
-        ## UNTESTED ##
-        self.parentApp.db = Database("%s/%s%s" % (self.username.value,
-                                         self.password.value,
-                                         self.host.value))
-
+        try:
+            self.parentApp.db = Database("%s/%s%s" % (self.username.value,
+                                                      self.password.value,
+                                                      self.host.value))
+        except cx_Oracle.DatabaseError:
+            npyscreen.notify_confirm("Invalid login, please try again.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            self.editing = True
+            return
+        
         self.parentApp.switchFormPrevious()
 
     def on_cancel(self):
         self.parentApp.switchFormPrevious()
 
-        
 
 class MainMenu(npyscreen.FormBaseNew):
     def create(self):
         def buttonpress0(*args):
             self.parentApp.switchForm("MAIN_POPUP")
         def buttonpress1(*args):
-            self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
+            if self.parentApp.db:
+                self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
+            else:
+                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                self.parentApp.switchForm("MAIN")
         def buttonpress2(*args):
-            self.parentApp.switchForm("AUTOTRANSACTION")
+            if self.parentApp.db:
+                self.parentApp.switchForm("AUTOTRANSACTION")
+            else:
+                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                self.parentApp.switchForm("MAIN")
         def buttonpress3(*args):
-            self.parentApp.switchForm("DRIVERLICENCEREGISTRATION")
+            if self.parentApp.db:
+                self.parentApp.switchForm("DRIVERLICENCEREGISTRATION")
+            else:
+                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                self.parentApp.switchForm("MAIN")
         def buttonpress4(*args):
-            self.parentApp.switchForm("VIOLATIONRECORD")
+            if self.parentApp.db:
+                self.parentApp.switchForm("VIOLATIONRECORD")
+            else:
+                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                self.parentApp.switchForm("MAIN")
         def buttonpress5(*args):
-            self.parentApp.switchForm("SEARCHENGINE")
+            if self.parentApp.db:
+                self.parentApp.switchForm("SEARCHENGINE")
+            else:
+                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                self.parentApp.switchForm("MAIN")
         def buttonpress6(*args):
             self.parentApp.setNextForm(None)
             self.editing = False
