@@ -2,6 +2,7 @@
 
 import npyscreen
 import cx_Oracle
+import pdb
 from new_vehicle_registration import NewVehicleRegistration
 from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
@@ -41,7 +42,6 @@ class MainMenuPopup(npyscreen.ActionPopup):
         self.parentApp.db = Database("%s/%s%s" % (self.username.value,
                                          self.password.value,
                                          self.host.value))
-
         self.parentApp.switchFormPrevious()
 
     def on_cancel(self):
