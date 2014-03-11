@@ -17,19 +17,23 @@ class ViolationRecord(npyscreen.ActionForm):
                                 editable=False, color="STANDOUT")
 
 
-        self.sin = self.add(npyscreen.TitleText, name='Violator SIN:')
-        self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial:')
-        self.officer_no = self.add(npyscreen.TitleText, name='Officer ID:')
-        self.violation_type = self.add(npyscreen.TitleText, name='Violation Type:')
+        self.sin = self.add(npyscreen.TitleText, name='Violator SIN:',begin_entry_at=20)
+        self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial:', begin_entry_at=20)
+        self.officer_no = self.add(npyscreen.TitleText, name='Officer ID:', begin_entry_at=20)
+        self.violation_type = self.add(npyscreen.TitleText, name='Violation Type:', begin_entry_at=20)
         self.date    = self.add(npyscreen.TitleDateCombo,
                                 name='Date:', begin_entry_at=20)
-        self.place = self.add(npyscreen.TitleText, name='Place:')
-        self.description = self.add(npyscreen.MultiLineEdit, name='Description:')
+        self.place = self.add(npyscreen.TitleText, name='Place:',begin_entry_at=20)
 
-        # # get maximum current ticket_id
-        # query = "SELECT MAX(ticket_id) FROM ticket"
-        # # set t_id to one greater
-        self.t_id.value = 12345# str(1 + self.parentApp.db.query({}, query)[0][0])
+        self.d_title    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
+                                name="Description:", begin_entry_at=20,
+                                editable=False, color="STANDOUT")
+        self.description = self.add(npyscreen.MultiLineEdit, name='Description:', relx=20, rely=9)        
+
+        # get maximum current ticket_id
+        query = "SELECT MAX(ticket_no) FROM ticket"
+        # set t_id to one greater
+        self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
 
 
     def process_information(self):
@@ -38,7 +42,7 @@ class ViolationRecord(npyscreen.ActionForm):
                         'vehicle_no' : self.vehicle_no.value,
                         'officer_no' : self.officer_no.value,
                         'violation_type': self.violation_type.value,
-                        "date" :self.date.value.strftime("%d-%b-%y"), # formatted for oracle
+                        "t_date" :self.date.value.strftime("%d-%b-%y"), # formatted for oracle
                         'place' : self.place.value,
                         'description' : self.description.value
                         }
@@ -51,15 +55,19 @@ class ViolationRecord(npyscreen.ActionForm):
                                              :vehicle_no,
                                              :officer_no,
                                              :violation_type,
-                                             :date,
+                                             :t_date,
                                              :place,
                                              :description) """
 
 
+    def validate_forms(self):
+        pass
+
     def on_ok(self):
         # Process information function here
         # Send insert statement here 'insert into ticket values(X,Y,Z)'
-        # 
+        self.validate_forms()
+
         entry_dict = self.process_information()
         insert = self.prepare_statement()
         error = self.parentApp.db.insert(entry_dict, insert)

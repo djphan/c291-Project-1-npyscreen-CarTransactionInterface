@@ -16,11 +16,11 @@ class Database:
             #     self.entries[field] = 'null'
 
     def insert(self, values_dict, prepare_statement):
-        self.cursor.prepare(prepare_statement.upper()) # prepare cursor
+        self.cursor.prepare(prepare_statement) # prepare cursor
         try:
             # subsitute dictionary values and execute SQL
-            self.cursor.setinputsizes(image=cx_Oracle.BLOB)
-            self.cursor.execute(None, {i:values_dict[i].upper() for i in values_dict}) 
+            # self.cursor.setinputsizes(image=cx_Oracle.BLOB)
+            self.cursor.execute(None, values_dict) 
         except cx_Oracle.DatabaseError as exc:
             # return error arguments if an error occurs, else return None
             error = exc.args[0]
@@ -52,4 +52,4 @@ class Database:
             return error
         else:
             self.connection.commit()
-        return rv
+

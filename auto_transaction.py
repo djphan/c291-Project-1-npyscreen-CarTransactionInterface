@@ -22,6 +22,29 @@ class AutoTransaction(npyscreen.ActionForm):
         # set t_id to one greater
         self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
 
+    def validate_forms(self):
+
+        # validate vehicle:
+        query = "SELECT COUNT(serial_no) FROM vehicle WHERE serial_no = :ser"
+        if self.parentApp.db.query({'ser':self.vehicle.value}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid vehicle serial number.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
+        # validate seller:
+        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
+        if self.parentApp.db.query({'sin':self.seller.value}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid seller ID.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+        
+        # validate buyer:
+        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
+        if self.parentApp.db.query({'sin':self.buyer.value}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid buyer ID.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+        
+        return True
+            
+
     def on_ok(self):
         # check for obvious illegal entries
         try:
@@ -41,15 +64,19 @@ class AutoTransaction(npyscreen.ActionForm):
             self.editing = True
             return        
 
+        if not self.validate_forms():
+            self.editing = True
+            return
+
         # DEBUG: 
-        # fout = open("output.txt", 'w')
-        # print(self.vehicle.value, file=fout)
-        # print(self.seller.value, file=fout)
-        # print(self.buyer.value, file=fout)
-        # print(self.date.value, file=fout)
-        # print(type(self.date.value), self.date.value.strftime("%d-%b-%y"), file=fout)
-        # print(self.price.value, self.price.value.strip('$'), file=fout)
-        # print("T_ID:", self.t_id.value, file=fout)
+        fout = open("output.txt", 'w')
+        print(self.vehicle.value, file=fout)
+        print(self.seller.value, file=fout)
+        print(self.buyer.value, file=fout)
+        print(self.date.value, file=fout)
+        print(type(self.date.value), self.date.value.strftime("%d-%b-%y"), file=fout)
+        print(self.price.value, self.price.value.strip('$'), file=fout)
+        print("T_ID:", self.t_id.value, file=fout)
 
         # insert new auto transaction into table
         values = {"transaction_id" :int(self.t_id.value),
@@ -95,15 +122,10 @@ class AutoTransaction(npyscreen.ActionForm):
             npyscreen.notify_confirm(str(error), title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return
         
-        # if all of the above succeeded:
-        # increment next t_id
-        # self.t_id.value = str(int(self.t_id.value) + 1)
-
         # Add option to do another transaction in this form???
         npyscreen.notify_confirm("Success!", title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-        self.parentApp.switchFormPrevious()
-
+        self.parentApp.switchForm("AUTOTRANSACTION")
 
 
     def on_cancel(self):
-        self.parentApp.switchFormPrevious()
+        self.parentApp.switchForm("MAIN")
