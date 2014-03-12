@@ -8,6 +8,7 @@ from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
+from add_owner_on_vehicle import AddOwnerOnVehicle
 from database import Database
     
         
@@ -28,7 +29,8 @@ class MyApplication(npyscreen.NPSAppManaged):
                      ViolationRecord, name='Violation Record')
         self.addForm('SEARCHENGINE',
                      SearchEngine, name='Search Engine')
-    
+        self.addForm('ADDOWNERONVEHICLE',
+                     AddOwnerOnVehicle, name='Add owner on vehicle')
 
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
@@ -48,7 +50,6 @@ class MainMenuPopup(npyscreen.ActionPopup):
         self.parentApp.switchFormPrevious()
 
         
-
 class MainMenu(npyscreen.FormBaseNew):
     def create(self):
         def buttonpress0(*args):

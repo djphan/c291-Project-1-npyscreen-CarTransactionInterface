@@ -43,7 +43,7 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
 
         # ensure sin is not left blank
         if self.sin.value == '':
-            npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
+            npyscreen.notify_confirm("Please enter a SIN", 
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
