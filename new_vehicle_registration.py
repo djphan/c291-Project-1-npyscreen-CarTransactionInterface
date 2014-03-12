@@ -51,7 +51,7 @@ class NewVehicleRegistration(npyscreen.ActionForm):
         # Check if type_id is in existing database
         # Dan Note: Does not work right now. Registers all type_ids as invalid. Check query???
         query = "SELECT count(type_id) FROM vehicle_type where type_id = :type_id"
-        if self.parentApp.db.query({'type_id' : int(self.type_id.value)}, query)[0][0]:
+        if self.parentApp.db.query({'type_id' : int(self.type_id.value)}, query)[0][0] == 0:
             npyscreen.notify_confirm("Vehicle Type ID does not exist in database.", title="Type id error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
