@@ -11,7 +11,7 @@ class NewVehicleRegistration(npyscreen.ActionForm):
         self.type_id = self.add(npyscreen.TitleText, name='Type ID:')
         self.nextrely += 1
         self.button1 = self.add(npyscreen.ButtonPress, name = "Add owner")
-        self.button1.whenPressed = self.button_press_add_owner
+        # self.button1.whenPressed = self.button_press_add_owner
         # self.owner = self.add(npyscreen.MultiLineEdit, name=':')
 
     def process_data(self):
