@@ -8,6 +8,7 @@ from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
+from add_owner_on_vehicle import AddOwnerOnVehicle
 from database import Database
 from driver_search import DriverSearch
 from violation_search import ViolationSearch
@@ -31,6 +32,8 @@ class MyApplication(npyscreen.NPSAppManaged):
                      SearchEngine, name='Search Engine')
         self.addFormClass('DRIVER_SEARCH',
                      DriverSearch, name='Driver Search')
+        self.addForm('ADDOWNERONVEHICLE',
+                     AddOwnerOnVehicle, name='Add owner')
         self.addFormClass('VIOLATION_SEARCH',
                      ViolationSearch, name='Violation Search')
         self.addFormClass('VEHICLE_HISTORY_SEARCH',
@@ -42,7 +45,7 @@ class MainMenuPopup(npyscreen.ActionPopup):
         self.username = self.add(npyscreen.TitleText, name="Oracle user:")
         self.username.value = 'sobolews'
         self.password = self.add(npyscreen.TitlePassword, name="Password:")
-        self.password.value = '2Ajtja.a'
+        self.password.value = ''
         self.host = self.add(npyscreen.TitleText, name="Host:")
         self.host.value = "@gwynne.cs.ualberta.ca:1521/CRS"
 
