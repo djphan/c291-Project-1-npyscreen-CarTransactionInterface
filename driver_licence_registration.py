@@ -56,7 +56,7 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
 
         # ensure sin is not already in the drive_licence table
         query = "SELECT COUNT(sin) FROM drive_licence WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.sin.value}, query)[0][0] != 0:
+        if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] != 0:
             npyscreen.notify_confirm("Person with sin: " + self.sin.value + 
             " is already licenced", 
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)

@@ -18,7 +18,6 @@ class MyApplication(npyscreen.NPSAppManaged):
         self.addForm('MAIN', MainMenu, name="MAIN MENU")
         self.addForm('MAIN_POPUP', MainMenuPopup,
                      name="Connect to Oracle")
-
         self.addForm('NEWVEHICLEREGISTRATION',
                      NewVehicleRegistration, name='New Vehicle Registration')
         self.addForm('AUTOTRANSACTION',
@@ -30,7 +29,7 @@ class MyApplication(npyscreen.NPSAppManaged):
         self.addForm('SEARCHENGINE',
                      SearchEngine, name='Search Engine')
         self.addForm('ADDOWNERONVEHICLE',
-                     AddOwnerOnVehicle, name='Add owner on vehicle')
+                     AddOwnerOnVehicle, name='Add owner')
 
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
