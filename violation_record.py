@@ -15,7 +15,7 @@ class ViolationRecord(npyscreen.ActionForm):
         self.t_id    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                                 name="Ticket ID:", begin_entry_at=20,
                                 editable=False, color="STANDOUT")
-
+        self.nextrely += 1
 
         self.sin = self.add(npyscreen.TitleText, name='Violator SIN:',begin_entry_at=20)
         self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial:', begin_entry_at=20)
@@ -24,11 +24,12 @@ class ViolationRecord(npyscreen.ActionForm):
         self.date    = self.add(npyscreen.TitleDateCombo,
                                 name='Date:', begin_entry_at=20)
         self.place = self.add(npyscreen.TitleText, name='Place:',begin_entry_at=20)
+        self.nextrely+=1
 
         self.d_title    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                                 name="Description:", begin_entry_at=20,
                                 editable=False, color="STANDOUT")
-        self.description = self.add(npyscreen.MultiLineEdit, name='Description:', relx=20, rely=9)        
+        self.description = self.add(npyscreen.MultiLineEdit, name='Description:', relx=22, rely=11)        
 
         # get maximum current ticket_id
         query = "SELECT MAX(ticket_no) FROM ticket"
@@ -62,7 +63,7 @@ class ViolationRecord(npyscreen.ActionForm):
 
     def validate_forms(self):
         pass
-
+    
     def on_ok(self):
         # Process information function here
         # Send insert statement here 'insert into ticket values(X,Y,Z)'
@@ -80,8 +81,8 @@ class ViolationRecord(npyscreen.ActionForm):
 
         npyscreen.notify_confirm("Success!", title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
 
-        self.parentApp.switchFormPrevious()
+        self.parentApp.switchForm("VIOLATIONRECORD")
 
     def on_cancel(self):
-        self.parentApp.switchFormPrevious()
+        self.parentApp.switchForm("MAIN")
 

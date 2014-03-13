@@ -9,15 +9,16 @@ from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
 from database import Database
-    
+from driver_search import DriverSearch
+from violation_search import ViolationSearch
+from vehicle_history_search import VehicleHistorySearch    
         
 class MyApplication(npyscreen.NPSAppManaged):
     def onStart(self):
 
         self.addFormClass('MAIN', MainMenu, name="MAIN MENU")
-        self.addForm('MAIN_POPUP', MainMenuPopup,
-                     name="Connect to Oracle")
-
+        self.addFormClass('MAIN_POPUP',
+                     MainMenuPopup, name="Connect to Oracle")
         self.addFormClass('NEWVEHICLEREGISTRATION',
                      NewVehicleRegistration, name='New Vehicle Registration')
         self.addFormClass('AUTOTRANSACTION',
@@ -28,7 +29,13 @@ class MyApplication(npyscreen.NPSAppManaged):
                      ViolationRecord, name='Violation Record')
         self.addFormClass('SEARCHENGINE',
                      SearchEngine, name='Search Engine')
-        self.db = None
+        self.addFormClass('DRIVER_SEARCH',
+                     DriverSearch, name='Driver Search')
+        self.addFormClass('VIOLATION_SEARCH',
+                     ViolationSearch, name='Violation Search')
+        self.addFormClass('VEHICLE_HISTORY_SEARCH',
+                     VehicleHistorySearch, name='Vehicle History Search')
+        self.db = Database()   # empty Database object with db.logged_in = False
 
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
@@ -45,67 +52,57 @@ class MainMenuPopup(npyscreen.ActionPopup):
                                                       self.password.value,
                                                       self.host.value))
         except cx_Oracle.DatabaseError:
-            npyscreen.notify_confirm("Invalid login, please try again.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            self.editing = True
-            return
-        
-        self.parentApp.switchFormPrevious()
+            self.parentApp.db = Database()
+            self.parentApp.switchForm("MAIN_POPUP")
+        else:
+            self.parentApp.switchFormPrevious()
 
     def on_cancel(self):
         self.parentApp.switchFormPrevious()
 
 
 class MainMenu(npyscreen.FormBaseNew):
+    def notify_not_logged_in(self):
+        npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+        self.parentApp.switchForm("MAIN")
+
     def create(self):
         def buttonpress0(*args):
             self.parentApp.switchForm("MAIN_POPUP")
         def buttonpress1(*args):
-            if self.parentApp.db:
-                self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
-            else:
-                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-                self.parentApp.switchForm("MAIN")
+            if self.parentApp.db.logged_in: self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
+            else: self.notify_not_logged_in()
         def buttonpress2(*args):
-            if self.parentApp.db:
-                self.parentApp.switchForm("AUTOTRANSACTION")
-            else:
-                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-                self.parentApp.switchForm("MAIN")
+            if self.parentApp.db.logged_in: self.parentApp.switchForm("AUTOTRANSACTION")
+            else: self.notify_not_logged_in()
         def buttonpress3(*args):
-            if self.parentApp.db:
-                self.parentApp.switchForm("DRIVERLICENCEREGISTRATION")
-            else:
-                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-                self.parentApp.switchForm("MAIN")
+            if self.parentApp.db.logged_in: self.parentApp.switchForm("DRIVERLICENCEREGISTRATION")
+            else: self.notify_not_logged_in()
         def buttonpress4(*args):
-            if self.parentApp.db:
-                self.parentApp.switchForm("VIOLATIONRECORD")
-            else:
-                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-                self.parentApp.switchForm("MAIN")
+            if self.parentApp.db.logged_in: self.parentApp.switchForm("VIOLATIONRECORD")
+            else: self.notify_not_logged_in()
         def buttonpress5(*args):
-            if self.parentApp.db:
-                self.parentApp.switchForm("SEARCHENGINE")
-            else:
-                npyscreen.notify_confirm("Please log in to Oracle Database first!", title="No Database Connection", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-                self.parentApp.switchForm("MAIN")
+            if self.parentApp.db.logged_in: self.parentApp.switchForm("SEARCHENGINE")
+            else: self.notify_not_logged_in()
         def buttonpress6(*args):
             self.parentApp.setNextForm(None)
             self.editing = False
 
-        self.button0 = self.add(npyscreen.ButtonPress, name="Oracle Login", rely=2)
+        self.button0 = self.add(npyscreen.ButtonPress, name="Oracle Login")
         self.button0.whenPressed = buttonpress0
-        self.button1 = self.add(npyscreen.ButtonPress, name="New Vehicle Registration", rely=4)
+        self.nextrely += 1 
+        self.button1 = self.add(npyscreen.ButtonPress, name="New Vehicle Registration")
         self.button1.whenPressed = buttonpress1
-        self.button2 = self.add(npyscreen.ButtonPress, name="Auto Transaction", rely=5)
+        self.button2 = self.add(npyscreen.ButtonPress, name="Auto Transaction")
         self.button2.whenPressed = buttonpress2
-        self.button3 = self.add(npyscreen.ButtonPress, name="Driver Licence Registration", rely=6)
+        self.button3 = self.add(npyscreen.ButtonPress, name="Driver Licence Registration")
         self.button3.whenPressed = buttonpress3
-        self.button4 = self.add(npyscreen.ButtonPress, name="Violation Record", rely=7)
+        self.button4 = self.add(npyscreen.ButtonPress, name="Violation Record")
         self.button4.whenPressed = buttonpress4
-        self.button5 = self.add(npyscreen.ButtonPress, name="Search Engine", rely=8)
+        self.button5 = self.add(npyscreen.ButtonPress, name="Search Engine")
         self.button5.whenPressed = buttonpress5
-        self.button6 = self.add(npyscreen.ButtonPress, name="Quit", rely=10)
+        self.nextrely += 1
+        self.button6 = self.add(npyscreen.ButtonPress, name="Quit",)
         self.button6.whenPressed = buttonpress6
 
 if __name__ == "__main__":

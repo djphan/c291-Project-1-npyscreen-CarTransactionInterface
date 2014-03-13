@@ -49,15 +49,8 @@ class AutoTransaction(npyscreen.ActionForm):
         # check for obvious illegal entries
         try:
             # are all the forms filled?
-            assert all([self.vehicle.value, self.seller.value, 
-                        self.buyer.value, self.date.value, self.price.value])
             # can price be converted to a float (with optional '$') ?
             float(self.price.value.strip('$'))
-
-        except AssertionError:
-            npyscreen.notify_confirm("Please fill in all info before submitting.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            self.editing = True
-            return        
 
         except ValueError:
             npyscreen.notify_confirm("Price is not a valid amount of money.", title="Price Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)

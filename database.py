@@ -2,24 +2,26 @@ import cx_Oracle
 import npyscreen
 
 class Database:
-    def __init__(self, connect_str):
+    def __init__(self, connect_str=None):
+        if connect_str is None:
+            self.logged_in = False
+            return
         try:
             self.connection = cx_Oracle.connect(connect_str)
-            self.cursor = self.connection.cursor()
         except cx_Oracle.DatabaseError as exc:
             error, = exc.args 
+            self.logged_in = False
             npyscreen.notify_confirm(error.message, editw=1,
                                                     title='Login failure')
-
-            # PUT IN NULL PROCESSING
-            # if self.entries[field] in {'', 'null'}: # If the entry is blank fill in null
-            #     self.entries[field] = 'null'
+            raise exc
+        else:
+            self.cursor = self.connection.cursor()
+            self.logged_in = True
 
     def insert(self, values_dict, prepare_statement):
         self.cursor.prepare(prepare_statement) # prepare cursor
         try:
             # subsitute dictionary values and execute SQL
-            # self.cursor.setinputsizes(image=cx_Oracle.BLOB)
             self.cursor.execute(None, values_dict) 
         except cx_Oracle.DatabaseError as exc:
             # return error arguments if an error occurs, else return None
@@ -41,15 +43,6 @@ class Database:
         rv = self.cursor.fetchall()
         return rv
 
-    def delete(self, values_dict, prepare_statement):
-        self.cursor.prepare(prepare_statement) # prepare cursor
-        try:
-            # subsitute dictionary values and execute SQL
-            self.cursor.execute(None, values_dict) 
-        except cx_Oracle.DatabaseError as exc:
-            # return error arguments if an error occurs, else return None
-            error = exc.args[0]
-            return error
-        else:
-            self.connection.commit()
-
+    # delete currently does the same as insert, so this ensures that changes to
+    # insert affect delete as well
+    delete = insert
