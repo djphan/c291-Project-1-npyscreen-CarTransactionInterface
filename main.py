@@ -45,7 +45,7 @@ class MainMenuPopup(npyscreen.ActionPopup):
         self.username = self.add(npyscreen.TitleText, name="Oracle user:")
         self.username.value = 'sobolews'
         self.password = self.add(npyscreen.TitlePassword, name="Password:")
-        self.password.value = ''
+        self.password.value = '2Ajtja.a'
         self.host = self.add(npyscreen.TitleText, name="Host:")
         self.host.value = "@gwynne.cs.ualberta.ca:1521/CRS"
 
