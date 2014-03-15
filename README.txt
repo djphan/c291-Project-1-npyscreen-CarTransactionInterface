@@ -6,6 +6,9 @@ CMPUT 291 Project 1 (Python 3)
 __________________________
 COMMUNICATION / NOTES     |
 __________________________|
+!!! Test cases are up:
+https://eclass.srv.ualberta.ca/mod/page/view.php?id=998610
+We will have to alter some things to comply with these new requirements. Nothing too major though.
 
 TO DO:
  	driver_search.py            <--- done
