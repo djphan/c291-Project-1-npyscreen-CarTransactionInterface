@@ -17,8 +17,8 @@ class DriverSearch(npyscreen.ActionFormCarl):
         self.query_confirm = self.add(npyscreen.ButtonPress, name="OK", relx=70)
         self.query_confirm.whenPressed = self.process_query
 
-        self.results = self.add(npyscreen.Pager, name="Results:", height=18,
-                                max_height=18, scroll_exit=True,
+        self.results = self.add(npyscreen.Pager, name="Results:", height=16,
+                                max_height=16, scroll_exit=True,
                                 slow_scroll=True, exit_left=True, exit_right=True)
         
     def on_ok(self):
@@ -74,7 +74,7 @@ WHERE p.sin = l.sin(+) AND
 
         for person in joined:
             self.results.values.extend(joined[person])
-        npyscreen.notify_confirm(str(len(results))+" result"+('s','')[len(results)==1]+" found.", editw=1, title='')
+        npyscreen.notify_confirm(str(len(joined))+" result"+('s','')[len(joined)==1]+" found.", editw=1, title='')
 
         
 
