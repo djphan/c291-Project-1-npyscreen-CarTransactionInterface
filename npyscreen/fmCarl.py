@@ -1,14 +1,14 @@
 #!/usr/bin/python
 from . import fmForm
 from . import wgwidget as widget
-class ActionForm(fmForm.Form):
+class ActionFormCarl(fmForm.Form):
     """A form with OK and Cancel buttons.  Users should override the on_ok and on_cancel methods."""
     CANCEL_BUTTON_BR_OFFSET = (2, 12)
-    OK_BUTTON_TEXT          = "OK"
+    OK_BUTTON_TEXT          = "Back"
     CANCEL_BUTTON_TEXT      = "Cancel"
 
     def set_up_exit_condition_handlers(self):
-        super(ActionForm, self).set_up_exit_condition_handlers()
+        super(ActionFormCarl, self).set_up_exit_condition_handlers()
         self.how_exited_handers.update({
             widget.EXITED_ESCAPE:   self.find_cancel_button
         })
@@ -26,6 +26,7 @@ class ActionForm(fmForm.Form):
         cmx -= len(c_button_text)+self.__class__.CANCEL_BUTTON_BR_OFFSET[1]
         self.c_button = self.add_widget(self.__class__.OKBUTTON_TYPE, name=c_button_text, rely=cmy, relx=cmx, use_max_space=True)
         c_button_postion = len(self._widgets__)-1
+        self.c_button.hidden = True
         self.c_button.update()
         
         my, mx = self.curses_pad.getmaxyx()
@@ -94,7 +95,7 @@ class ActionForm(fmForm.Form):
         pass
     
     def move_ok_button(self):
-        super(ActionForm, self).move_ok_button()
+        super(ActionFormCarl, self).move_ok_button()
         if hasattr(self, 'c_button'):
             c_button_text = self.CANCEL_BUTTON_TEXT
             cmy, cmx = self.curses_pad.getmaxyx()
@@ -103,12 +104,3 @@ class ActionForm(fmForm.Form):
             self.c_button.rely = cmy
             self.c_button.relx = cmx
         
-        
-        
-class ActionFormExpanded(ActionForm):
-    BLANK_LINES_BASE   = 1
-    OK_BUTTON_BR_OFFSET = (1,6)
-    CANCEL_BUTTON_BR_OFFSET = (1, 12)
-
-
-    

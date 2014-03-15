@@ -10,6 +10,7 @@ from   .apNPSApplication        import NPSApp
 from   .apNPSApplicationManaged import NPSAppManaged
 from   .proto_fm_screen_area    import setTheme
 from   .fmForm                  import FormBaseNew, Form, TitleForm, TitleFooterForm, SplitForm, FormExpanded, FormBaseNewExpanded
+from .fmCarl import ActionFormCarl
 from   .fmActionForm            import ActionForm, ActionFormExpanded
 from   .fmFormWithMenus         import FormWithMenus, ActionFormWithMenus, \
                                        FormBaseNewWithMenus, SplitFormWithMenus
