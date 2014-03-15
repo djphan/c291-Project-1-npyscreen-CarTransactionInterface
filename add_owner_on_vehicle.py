@@ -75,7 +75,7 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
         if error:
             # handle error avoid main menu return
             self.editing = True
-            npyscreen.notify_confirm(str(error[0]), title="Error", form_color='STANDOUT', 
+            npyscreen.notify_confirm(str(error), title="Error", form_color='STANDOUT', 
                 wrap=True, wide=False, editw=1)
             return
 
