@@ -4,7 +4,7 @@ import npyscreen
 import cx_Oracle
 import pdb
 from new_vehicle_registration import NewVehicleRegistration
-from auto_transaction import AutoTransaction
+from auto_transaction import AutoTransaction, AddBuyer, AddSeller
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
@@ -17,13 +17,19 @@ from vehicle_history_search import VehicleHistorySearch
 class MyApplication(npyscreen.NPSAppManaged):
     def onStart(self):
 
+        self.db = Database()   # empty Database object with db.logged_in = False
         self.addFormClass('MAIN', MainMenu, name="MAIN MENU")
         self.addFormClass('MAIN_POPUP',
                      MainMenuPopup, name="Connect to Oracle")
         self.addFormClass('NEWVEHICLEREGISTRATION',
                      NewVehicleRegistration, name='New Vehicle Registration')
-        self.addFormClass('AUTOTRANSACTION',
-                     AutoTransaction, name='Auto Transaction')
+
+        self.auto_transaction_initialized = False
+        self.addFormClass('ADDBUYER', AddBuyer, name='Add Buyer')
+        self.addFormClass('ADDSELLER', AddSeller, name='Add Seller')
+
+
+
         self.addFormClass('DRIVERLICENCEREGISTRATION',
                      DriverLicenceRegistration, name='Driver Licence Registration')
         self.addFormClass('VIOLATIONRECORD',
@@ -38,7 +44,6 @@ class MyApplication(npyscreen.NPSAppManaged):
                      ViolationSearch, name='Violation Search')
         self.addFormClass('VEHICLE_HISTORY_SEARCH',
                      VehicleHistorySearch, name='Vehicle History Search')
-        self.db = Database()   # empty Database object with db.logged_in = False
 
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
@@ -76,7 +81,11 @@ class MainMenu(npyscreen.FormBaseNew):
             if self.parentApp.db.logged_in: self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
             else: self.notify_not_logged_in()
         def buttonpress2(*args):
-            if self.parentApp.db.logged_in: self.parentApp.switchForm("AUTOTRANSACTION")
+            if self.parentApp.db.logged_in:
+                if not self.parentApp.auto_transaction_initialized:
+                    self.parentApp.addForm('AUTOTRANSACTION', AutoTransaction, name='Auto Transaction')
+                    self.parentApp.auto_transaction_initialized = True
+                self.parentApp.switchForm("AUTOTRANSACTION")
             else: self.notify_not_logged_in()
         def buttonpress3(*args):
             if self.parentApp.db.logged_in: self.parentApp.switchForm("DRIVERLICENCEREGISTRATION")
