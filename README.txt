@@ -9,8 +9,8 @@ __________________________|
 
 TO DO:
  	driver_search.py            <--- done
- 	vehicle_history_search.py   <--- Jon will do
- 	violation_search.py
+ 	vehicle_history_search.py
+ 	violation_search.py         <--- Jon will do
  	
 If you want to work on one of them please make a note here so we don't end up doing the same thing twice.
 
