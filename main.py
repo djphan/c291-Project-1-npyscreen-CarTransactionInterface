@@ -8,7 +8,7 @@ from auto_transaction import AutoTransaction
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
-# from add_owner_on_vehicle import AddOwnerOnVehicle
+from add_owner_on_vehicle import AddOwnerOnVehicle
 from database import Database
 from driver_search import DriverSearch
 from violation_search import ViolationSearch
@@ -32,8 +32,8 @@ class MyApplication(npyscreen.NPSAppManaged):
                      SearchEngine, name='Search Engine')
         self.addFormClass('DRIVER_SEARCH',
                      DriverSearch, name='Driver Search')
-        # self.addForm('ADDOWNERONVEHICLE',
-        #              AddOwnerOnVehicle, name='Add owner')
+        self.addForm('ADDOWNERONVEHICLE',
+                     AddOwnerOnVehicle, name='Add owner')
         self.addFormClass('VIOLATION_SEARCH',
                      ViolationSearch, name='Violation Search')
         self.addFormClass('VEHICLE_HISTORY_SEARCH',
