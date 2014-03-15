@@ -1,4 +1,5 @@
 import npyscreen
+import datetime
 
 class AutoTransaction(npyscreen.ActionForm):
     def create(self):
@@ -23,7 +24,6 @@ class AutoTransaction(npyscreen.ActionForm):
         self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
 
     def validate_forms(self):
-
         # validate vehicle:
         query = "SELECT COUNT(serial_no) FROM vehicle WHERE serial_no = :ser"
         if self.parentApp.db.query({'ser':self.vehicle.value}, query)[0][0] == 0:
@@ -61,15 +61,8 @@ class AutoTransaction(npyscreen.ActionForm):
             self.editing = True
             return
 
-        # DEBUG: 
-        fout = open("output.txt", 'w')
-        print(self.vehicle.value, file=fout)
-        print(self.seller.value, file=fout)
-        print(self.buyer.value, file=fout)
-        print(self.date.value, file=fout)
-        print(type(self.date.value), self.date.value.strftime("%d-%b-%y"), file=fout)
-        print(self.price.value, self.price.value.strip('$'), file=fout)
-        print("T_ID:", self.t_id.value, file=fout)
+        if self.date.value == '': # set date to today if unspecified
+            self.date.value = datetime.date.today()
 
         # insert new auto transaction into table
         values = {"transaction_id" :int(self.t_id.value),
@@ -83,8 +76,6 @@ class AutoTransaction(npyscreen.ActionForm):
         error = self.parentApp.db.insert(values, prepare)
         if error:
             # handle error
-            print(error, file=fout)
-            print(error.code, file=fout)
             # don't return to main menu
             self.editing = True
             npyscreen.notify_confirm(str(error), title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
@@ -115,10 +106,8 @@ class AutoTransaction(npyscreen.ActionForm):
             npyscreen.notify_confirm(str(error), title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return
         
-        # Add option to do another transaction in this form???
         npyscreen.notify_confirm("Success!", title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
         self.parentApp.switchForm("AUTOTRANSACTION")
-
 
     def on_cancel(self):
         self.parentApp.switchForm("MAIN")

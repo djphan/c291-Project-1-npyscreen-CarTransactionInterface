@@ -1,4 +1,5 @@
 import npyscreen
+import datetime
 
 """
 Plan: 
@@ -21,11 +22,9 @@ class ViolationRecord(npyscreen.ActionForm):
         self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial:', begin_entry_at=20)
         self.officer_no = self.add(npyscreen.TitleText, name='Officer ID:', begin_entry_at=20)
         self.violation_type = self.add(npyscreen.TitleText, name='Violation Type:', begin_entry_at=20)
-        self.date    = self.add(npyscreen.TitleDateCombo,
-                                name='Date:', begin_entry_at=20)
+        self.date    = self.add(npyscreen.TitleDateCombo, name='Date:', begin_entry_at=20)
         self.place = self.add(npyscreen.TitleText, name='Place:',begin_entry_at=20)
         self.nextrely+=1
-
         self.d_title    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                                 name="Description:", begin_entry_at=20,
                                 editable=False, color="STANDOUT")
@@ -47,27 +46,50 @@ class ViolationRecord(npyscreen.ActionForm):
                         'place' : self.place.value,
                         'description' : self.description.value
                         }
-
-        return self.entries  # Check with the others to the dictionary format again
-
+        return self.entries
+        
     def prepare_statement(self):
-        return """ insert into ticket values(:t_id,
-                                             :sin,
-                                             :vehicle_no,
-                                             :officer_no,
-                                             :violation_type,
-                                             :t_date,
-                                             :place,
-                                             :description) """
-
+        return """insert into ticket values(:t_id, :sin, :vehicle_no,
+                                            :officer_no, :violation_type,
+                                            :t_date, :place, :description) """
 
     def validate_forms(self):
-        pass
+        # validate Violator SIN:
+        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
+        if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid Violator SIN.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
+        # validate Vehicle Serial:
+        query = "SELECT COUNT(serial_no) FROM vehicle WHERE serial_no = :ser"
+        if self.parentApp.db.query({'ser':self.vehicle_no.value.ljust(15, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid vehicle serial number.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
+        # validate Officer ID (SIN):
+        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
+        if self.parentApp.db.query({'sin':self.officer_no.value.ljust(15, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid Officer ID.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
+        # validate Violation Type:
+        query = "SELECT COUNT(vtype) FROM ticket_type WHERE vtype = :v_type"
+        if self.parentApp.db.query({'v_type':self.violation_type.value.ljust(10, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid Violation Type.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
+        return True
     
     def on_ok(self):
         # Process information function here
-        # Send insert statement here 'insert into ticket values(X,Y,Z)'
-        self.validate_forms()
+
+        
+        if not self.validate_forms():
+            self.editing = True
+            return
+
+        if self.date.value == '': # set date to today if unspecified
+            self.date.value = datetime.date.today()
 
         entry_dict = self.process_information()
         insert = self.prepare_statement()

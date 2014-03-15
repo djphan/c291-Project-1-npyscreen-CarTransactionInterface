@@ -2,10 +2,6 @@ import npyscreen
 
 class DriverSearch(npyscreen.ActionFormCarl):
     def create(self):
-
-        # self.backbutton.whenPressed = lambda: self.parentApp.switchForm("SEARCHENGINE")
-        # self.tmp = self.add(npyscreen.TitleText)
-        
         self.chooser = self.add(npyscreen.SelectOne, max_height=2,
                                 scroll_exit=True)
         self.chooser.values = ["Search by name", "Search by licence number"]
@@ -74,12 +70,11 @@ WHERE p.sin = l.sin(+) AND
                 else:       joined[line[8]].append("Expiring Date: N/A\n")
                 joined[line[8]].append('\n')                                                       
             else:
-                joined[line[8]].insert(-2, '               %s\n'%('%s - %s'%(line[5], line[6]), "N/A")[not line[5]])
+                joined[line[8]].insert(-2, ' '*15+'%s\n'%('%s - %s'%(line[5], line[6]), "N/A")[not line[5]])
 
         for person in joined:
             self.results.values.extend(joined[person])
-        npyscreen.notify_confirm(str(len(results))+(" results found."," result found.")[len(results)==1],
-                                 editw=1, title='')
+        npyscreen.notify_confirm(str(len(results))+" result"+('s','')[len(results)==1]+" found.", editw=1, title='')
 
         
 
