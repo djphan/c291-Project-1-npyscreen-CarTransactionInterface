@@ -75,15 +75,17 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
                 wrap=True, wide=False, editw=1)
             
             # prompt to add a new person.
-            rv = npyscreen.notify_ok_cancel(\
+            response = npyscreen.notify_ok_cancel(\
                 "Enter a person with this SIN into the database?", 
                 title="Error", form_color='STANDOUT', 
                 wrap=True, editw=1)
 
             # if user selected ok forward them to the 
             # add person form.
-            if rv:
-                self.parentApp.setNextFormPrevious('ADDPERSON')
+            if response:
+                # set the next form to be the people form
+                # if the add person form exits with switchFormPrevious
+                # we should end up back here.
                 self.parentApp.setNextForm('ADDPERSON')
             else:
                 return

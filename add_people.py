@@ -7,56 +7,48 @@ class AddPerson(npyscreen.ActionForm):
         self.sin = self.add(npyscreen.TitleText, name='SIN')
         self.name = self.add(npyscreen.TitleText, name='Name')
         self.height = self.add(npyscreen.TitleText, name='Height') 
+        self.weight = self.add(npyscreen.TitleText, name='Weight') 
         self.eye_color = self.add(npyscreen.TitleText, name='Eye color') 
         self.hair_color = self.add(npyscreen.TitleText, name='Hair color') 
         self.addr = self.add(npyscreen.TitleText, name='Address') 
-        self.birthday = self.add(npyscreen.TitleText, name='Birthday') 
+        self.birthday = self.add(npyscreen.TitleDateCombo, name='Birthday',
+                                        allowClear=True) 
         self.gender = self.add(npyscreen.TitleSelectOne, name='Gender',
                                             values=['M', 'F'])
     
     def validate_forms(self):
         # ensure sin is not left blank
-        if self.owner_id.value == '':
+        if self.sin.value == '':
             npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # ensure owner_id references valid sin in db
+        # ensure sin is not already in the people table
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.owner_id.value.ljust(15, ' ')}, 
-            query)[0][0] == 0:
-            npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
+        if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, 
+            query)[0][0] != 0:
+            npyscreen.notify_confirm("A person already exists with the given SIN.", 
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # check that the vehicle id is in the vehicle table.
-        # this requires that the vehicle registration data is entered into the db
-        # before owners can be.
-        query = "SELECT COUNT(serial_no) FROM vehicle WHERE serial_no = :id"
-        if self.parentApp.db.query({'id':self.vehicle_id.value.ljust(15, ' ')}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Vehicle ID does not correspond to a registered vehicle", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
-
-        # force them to select yes/no for primary owner
-        if  not self.is_primary_owner.value:
-            npyscreen.notify_confirm("You must indicate if the owner is primary",
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
-        
-        # if they select primary owner, ensure no other primary owner on the vehicle
-        # exists in the database, this is just to provide a clear message to the user.
-        if self.is_primary_owner.values[self.is_primary_owner.value[0]] == 'Y':
-            query = "SELECT count(*) FROM owner where vehicle_id = :v_id \
-                and owner_id = :o_id and is_primary_owner = :primary"
-            query_dict = {'v_id':self.vehicle_id.value.ljust(15, ' '),
-                          'o_id':self.owner_id.value.ljust(15, ' '),
-                          'primary':'y'}
-            if self.parentApp.db.query(query_dict, query)[0][0] >= 1:
-                npyscreen.notify_confirm("This vehicle already has a\
-                    primary owner registered", 
+        # check that the name can be cast to a string
+        if self.name.value:
+            try:
+                if len(str(self.name.value)) > 40:
+                    npyscreen.notify_confirm("Person name must be less than\
+                    40 chars.", title="Error", form_color='STANDOUT', 
+                    wrap=True, wide=False, editw=1)
+            except exception as error:
+                npyscreen.notify_confirm("A person already exists with the given SIN.", 
                 title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
+        
+        
+        # force user to select M/F for primary gender
+        if  not self.gender.value:
+            npyscreen.notify_confirm("You must indicate gender.",
+            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
 
         return True 
 
@@ -65,14 +57,51 @@ class AddPerson(npyscreen.ActionForm):
             self.editing = True
             return
 
-        # send data to db
-        values = {"owner_id"          :str(self.owner_id.value),
-                  "vehicle_id"        :str(self.vehicle_id.value),
-                  "is_primary_owner"  :str(self.is_primary_owner.values
-                            [self.is_primary_owner.value[0]]).lower()} 
+        # deal with float for weight
+        try:
+            # if user provides a height
+            # try to convert height to float
+            # if we get an error notify
+            self.float_height = float(self.height.value)
+        except ValueError:
+            npyscreen.notify_confirm("Height must be a number.", title="Error", 
+                form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            # if we don't have a value for height set it as null
+            if self.height.value == None:
+                self.float_height = null
+            return False
         
-        prepare = "INSERT INTO owner VALUES (:owner_id, :vehicle_id, :is_primary_owner)"
-        error = self.parentApp.db.insert(values, prepare)
+        # deal with float for weight.
+        try:
+            # if user provides a weight
+            # try to convert weight to float
+            # if we get an error notify
+            self.float_weight = float(self.weight.value)
+        except ValueError:
+            npyscreen.notify_confirm("Weight must be a number.", title="Error", 
+                form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
+        # send data to db
+        entry_dict = {"sin"       :str(self.sin.value),
+                  "name"          :str(self.name.value),
+                  "height"        :self.float_height,
+                  "weight"        :self.float_weight,
+                  "eyecolor"      :str(self.eye_color.value),
+                  "haircolor"     :str(self.hair_color.value),
+                  "addr"          :str(self.addr.value),
+                  "gender"      :str(self.gender.values[self.gender.value[0]]).lower(), 
+                  "birthday"      :self.birthday.value.strftime("%d-%b-%y")}
+                   
+
+        insert = """
+            INSERT INTO people (sin, name, height, weight, eyecolor, haircolor, addr,
+            gender, birthday) values (:sin, :name, :height, :weight, :eyecolor,
+            :haircolor, :addr, :gender, :birthday)
+            """
+
+
+        error = self.parentApp.db.insert(entry_dict, insert)
         if error:
             # handle error avoid main menu return
             self.editing = True
@@ -85,8 +114,7 @@ class AddPerson(npyscreen.ActionForm):
             form_color='STANDOUT', wrap=True,
             wide=False, editw=1)
 
-        # nice to have: append added owners to the vehicle registration form.
-
+        # teleport us to the form from which we came!
         self.parentApp.switchFormPrevious() 
 
     def on_cancel(self):
