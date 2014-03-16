@@ -25,4 +25,5 @@ Other TO-DO's:
   Fix BLOB uploading                <-- Jon will discuss with TA on Monday
   
   <add other TODO's here if you have any>
-
+A people entry form must be created. The user should be forwarded here
+when they are entering data re a person that does not exist.

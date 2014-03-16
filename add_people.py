@@ -2,20 +2,18 @@ import npyscreen
 import cx_Oracle
 import os
 
-class AddOwnerOnVehicle(npyscreen.ActionPopup):
+class AddPerson(npyscreen.ActionForm):
     def create(self):
-        self.owner_id = self.add(npyscreen.TitleText, 
-                                            name='Owner ID:',
-                                            begin_entry_at=25)
-        self.vehicle_id = self.add(npyscreen.TitleText, name='Vehicle ID:', 
-                                            begin_entry_at=25)
-        self.is_primary_owner = self.add(npyscreen.TitleSelectOne, 
-                                            name='Primary Owner:',
-                                            values=['Y', 'N'],
-                                            begin_entry_at=25)
-        # if self.parentApp.serial_no:
-            # self.vehicle_id.value = self.parentApp.serial_no
-
+        self.sin = self.add(npyscreen.TitleText, name='SIN')
+        self.name = self.add(npyscreen.TitleText, name='Name')
+        self.height = self.add(npyscreen.TitleText, name='Height') 
+        self.eye_color = self.add(npyscreen.TitleText, name='Eye color') 
+        self.hair_color = self.add(npyscreen.TitleText, name='Hair color') 
+        self.addr = self.add(npyscreen.TitleText, name='Address') 
+        self.birthday = self.add(npyscreen.TitleText, name='Birthday') 
+        self.gender = self.add(npyscreen.TitleSelectOne, name='Gender',
+                                            values=['M', 'F'])
+    
     def validate_forms(self):
         # ensure sin is not left blank
         if self.owner_id.value == '':
@@ -25,8 +23,8 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
 
         # ensure owner_id references valid sin in db
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.owner_id.value.\
-            ljust(15, ' ')}, query)[0][0] == 0:
+        if self.parentApp.db.query({'sin':self.owner_id.value.ljust(15, ' ')}, 
+            query)[0][0] == 0:
             npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
@@ -35,11 +33,9 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
         # this requires that the vehicle registration data is entered into the db
         # before owners can be.
         query = "SELECT COUNT(serial_no) FROM vehicle WHERE serial_no = :id"
-        if self.parentApp.db.query({'id':self.vehicle_id.value.\
-            ljust(15, ' ')}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Vehicle ID does not correspond to\
-                a registered vehicle", 
-                title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+        if self.parentApp.db.query({'id':self.vehicle_id.value.ljust(15, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Vehicle ID does not correspond to a registered vehicle", 
+            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
         # force them to select yes/no for primary owner
@@ -57,39 +53,14 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
                           'o_id':self.owner_id.value.ljust(15, ' '),
                           'primary':'y'}
             if self.parentApp.db.query(query_dict, query)[0][0] >= 1:
-                npyscreen.notify_confirm("This vehicle already has a primary owner registered", 
+                npyscreen.notify_confirm("This vehicle already has a\
+                    primary owner registered", 
                 title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
 
         return True 
 
     def on_ok(self):
-        # ensure owner_id references valid sin in db
-        # if not we need to prompt the user to enter the person
-        # into the people db. We will open this form as a popup.
-        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.owner_id.value.\
-            ljust(15, ' ')}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
-                title="Error", form_color='STANDOUT', 
-                wrap=True, wide=False, editw=1)
-            
-            # prompt to add a new person.
-            rv = npyscreen.notify_ok_cancel(\
-                "Enter a person with this SIN into the database?", 
-                title="Error", form_color='STANDOUT', 
-                wrap=True, editw=1)
-
-            # if user selected ok forward them to the 
-            # add person form.
-            if rv:
-                self.parentApp.setNextFormPrevious('ADDPERSON')
-                self.parentApp.setNextForm('ADDPERSON')
-            else:
-                return
-            
-            return False
-
         if not self.validate_forms():
             self.editing = True
             return
@@ -97,18 +68,21 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
         # send data to db
         values = {"owner_id"          :str(self.owner_id.value),
                   "vehicle_id"        :str(self.vehicle_id.value),
-                  "is_primary_owner"  :str(self.is_primary_owner.values[self.is_primary_owner.value[0]]).lower()} 
+                  "is_primary_owner"  :str(self.is_primary_owner.values
+                            [self.is_primary_owner.value[0]]).lower()} 
         
         prepare = "INSERT INTO owner VALUES (:owner_id, :vehicle_id, :is_primary_owner)"
         error = self.parentApp.db.insert(values, prepare)
         if error:
             # handle error avoid main menu return
             self.editing = True
-            npyscreen.notify_confirm(str(error), title="Error", form_color='STANDOUT', 
+            npyscreen.notify_confirm(str(error), title="Error", 
+                form_color='STANDOUT', 
                 wrap=True, wide=False, editw=1)
             return
 
-        npyscreen.notify_confirm("Success!", title="Status", form_color='STANDOUT', wrap=True,
+        npyscreen.notify_confirm("Success!", title="Status", 
+            form_color='STANDOUT', wrap=True,
             wide=False, editw=1)
 
         # nice to have: append added owners to the vehicle registration form.

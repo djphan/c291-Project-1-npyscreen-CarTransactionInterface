@@ -13,7 +13,8 @@ from database import Database
 from driver_search import DriverSearch
 from violation_search import ViolationSearch
 from vehicle_history_search import VehicleHistorySearch    
-        
+from add_people import AddPerson        
+
 class MyApplication(npyscreen.NPSAppManaged):
     def onStart(self):
 
@@ -45,12 +46,16 @@ class MyApplication(npyscreen.NPSAppManaged):
         self.addFormClass('VEHICLE_HISTORY_SEARCH',
                      VehicleHistorySearch, name='Vehicle History Search')
 
+        # new additions for add people popup form
+        self.addFormClass('ADDPERSON', AddPerson, name='Add Person')
+
+
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
         self.username = self.add(npyscreen.TitleText, name="Oracle user:")
-        self.username.value = 'sobolews'
+        self.username.value = 'jcairo'
         self.password = self.add(npyscreen.TitlePassword, name="Password:")
-        self.password.value = '2Ajtja.a'
+        self.password.value = '$Jonnyc123'
         self.host = self.add(npyscreen.TitleText, name="Host:")
         self.host.value = "@gwynne.cs.ualberta.ca:1521/CRS"
 
