@@ -42,7 +42,29 @@ class AddPerson(npyscreen.ActionForm):
                 npyscreen.notify_confirm("A person already exists with the given SIN.", 
                 title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
+
+        # deal with float for weight
+        try:
+            # if user provides a height
+            # try to convert height to float
+            # if we get an error notify
+            self.float_height = float(self.height.value)
+        except ValueError:
+            npyscreen.notify_confirm("Height must be a number.", title="Error", 
+                form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
         
+        # deal with float for weight.
+        try:
+            # if user provides a weight
+            # try to convert weight to float
+            # if we get an error notify
+            self.float_weight = float(self.weight.value)
+        except ValueError:
+            npyscreen.notify_confirm("Weight must be a number.", title="Error", 
+                form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
         
         # force user to select M/F for primary gender
         if  not self.gender.value:
@@ -57,31 +79,7 @@ class AddPerson(npyscreen.ActionForm):
             self.editing = True
             return
 
-        # deal with float for weight
-        try:
-            # if user provides a height
-            # try to convert height to float
-            # if we get an error notify
-            self.float_height = float(self.height.value)
-        except ValueError:
-            npyscreen.notify_confirm("Height must be a number.", title="Error", 
-                form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            # if we don't have a value for height set it as null
-            if self.height.value == None:
-                self.float_height = null
-            return False
         
-        # deal with float for weight.
-        try:
-            # if user provides a weight
-            # try to convert weight to float
-            # if we get an error notify
-            self.float_weight = float(self.weight.value)
-        except ValueError:
-            npyscreen.notify_confirm("Weight must be a number.", title="Error", 
-                form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
-
         # send data to db
         entry_dict = {"sin"       :str(self.sin.value),
                   "name"          :str(self.name.value),
