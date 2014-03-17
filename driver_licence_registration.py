@@ -104,7 +104,10 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
 
         # if we are succesfull in opening, prep image for db entry
         image = image_file.read()
-        # self.parentApp.db.cursor.setinputsizes(image=cx_Oracle.BLOB)
+
+        # photo needed to match the name of the variable in the insert stmt.
+        # works properly now.
+        self.parentApp.db.cursor.setinputsizes(photo=cx_Oracle.BLOB)
         image_file.close() 
         
         # prep and send db statement

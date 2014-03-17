@@ -37,8 +37,7 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
         query = "SELECT COUNT(serial_no) FROM vehicle WHERE serial_no = :id"
         if self.parentApp.db.query({'id':self.vehicle_id.value.\
             ljust(15, ' ')}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Vehicle ID does not correspond to\
-                a registered vehicle", 
+            npyscreen.notify_confirm("Vehicle ID does not correspond to a registered vehicle", 
                 title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
