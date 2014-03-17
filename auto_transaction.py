@@ -7,10 +7,10 @@ class AddBuyer(npyscreen.ActionPopup):
 
     def on_ok(self):
         self.parentApp.AT_buyers.append(self.buyer_id.value)
-        self.parentApp.switchFormPrevious()
+        self.parentApp.switchForm("AUTOTRANSACTION")
 
     def on_cancel(self):
-        self.parentApp.switchFormPrevious()
+        self.parentApp.switchForm("AUTOTRANSACTION")
 
 class AddSeller(npyscreen.ActionPopup):
     def create(self):
@@ -23,46 +23,46 @@ class AddSeller(npyscreen.ActionPopup):
     def on_cancel(self):
         self.parentApp.switchFormPrevious()
         
-class AutoTransaction(npyscreen.ActionForm):
+class AutoTransaction(npyscreen.FormBaseNew):
     def create(self):
+        self.nextrelx+=1
         self.t_id    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                                 name="Transaction ID:", begin_entry_at=20,
                                 editable=False, color="STANDOUT")
-        self.nextrely += 1
-
+        self.nextrely+=1; self.nextrelx-=2
         self.add_seller = self.add(npyscreen.ButtonPress, name="Add Seller", width=10)
         self.add_seller.whenPressed = lambda: self.parentApp.switchForm("ADDSELLER")
-        self.nextrely-=1; self.nextrelx+=18
         self.add_buyer = self.add(npyscreen.ButtonPress, name="Add Buyer", width=10)
         self.add_buyer.whenPressed = lambda: self.parentApp.switchForm("ADDBUYER")
-        self.nextrely+=1; self.nextrelx-=18
-
+        self.nextrelx+=2
         self.vehicle = self.add(npyscreen.TitleText, use_two_lines=False,
                                 name='Vehicle Serial no:', begin_entry_at=20)
-        
         self.date    = self.add(npyscreen.TitleDateCombo,
                                 name='Date:', begin_entry_at=20)
         self.price   = self.add(npyscreen.TitleText,
                                 name='Price:', begin_entry_at=20)
+        self.nextrelx-=2; self.nextrely+=1
+        self.submit_button = self.add(npyscreen.ButtonPress, name="Submit", width=10)
+        self.submit_button.whenPressed = self.on_ok
+        self.nextrely-=1; self.nextrelx+=10
+        self.cancel_button = self.add(npyscreen.ButtonPress, name="Cancel", width=10)
+        self.cancel_button.whenPressed = self.on_cancel
+        self.nextrelx-=8
 ############
         self.nextrely+=1
-        self.sellersTitle = self.add(npyscreen.TitleFixedText, name="Sellers:", editable=False, max_width=12)
+        self.sellersTitle = self.add(npyscreen.TitleFixedText, name="Seller(s):", editable=False, max_width=12)
         self.nextrely-=1; self.nextrelx+=40
-        self.buyersTitle = self.add(npyscreen.TitleFixedText, name="Buyers:", editable=False, max_width=12)
-
+        self.buyersTitle = self.add(npyscreen.TitleFixedText, name="Buyer(s):", editable=False, max_width=12)
         self.nextrely-=1; self.nextrelx-=20
         self.sellers = self.add(npyscreen.Pager, name="sellers", height=10,
                                 max_height=10, width=16, max_width=16, scroll_exit=True, slow_scroll=True, exit_left=True, exit_right=True)
         self.parentApp.AT_sellers = list()
         self.sellers.values = self.parentApp.AT_sellers
-
         self.nextrely-=10; self.nextrelx+=35
         self.buyers = self.add(npyscreen.Pager, name="buyers", height=10,
                                 max_height=10, width=16, max_width=16, scroll_exit=True, slow_scroll=True)
         self.parentApp.AT_buyers = list()
         self.buyers.values = self.parentApp.AT_buyers
-
-
 
         # get maximum current transaction_id
         query = "SELECT MAX(transaction_id) FROM auto_sale"
@@ -76,11 +76,12 @@ class AutoTransaction(npyscreen.ActionForm):
             npyscreen.notify_confirm("Invalid vehicle serial number.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # validate seller:
+        # validate sellers:
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.seller.value}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Seller not in database.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
+        for seller in self.sellers.values:
+            if self.parentApp.db.query({'sin':seller.strip('\n').ljust(15, ' ')}, query)[0][0] == 0:
+                npyscreen.notify_confirm("Seller %s not in database."%seller, title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                return False
 
         # do all sellers own vehicle?
         query = "SELECT COUNT(*) FROM owner WHERE owner_id = ':o_id' AND vehicle_id = :v_id"
@@ -170,14 +171,19 @@ class AutoTransaction(npyscreen.ActionForm):
 
         self.parentApp.AT_sellers = list()
         self.parentApp.AT_buyers  = list()
-        # TODO : clear all other fields
-
-        # self.parentApp.switchForm("AUTOTRANSACTION")
+        self.vehicle.value = ''
+        self.date.value = ''
+        self.price.value = ''
 
     def on_cancel(self):
-        # # get maximum current transaction_id
-        # query = "SELECT MAX(transaction_id) FROM auto_sale"
-        # # set t_id to one greater
-        # self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
+        self.parentApp.AT_sellers = list()
+        self.parentApp.AT_buyers  = list()
+        self.vehicle.value = ''
+        self.date.value = ''
+        self.price.value = ''
 
-        self.parentApp.switchForm("MAIN")
+        self.parentApp.setNextForm("MAIN")
+        self.editing=False
+        # self.parentApp.removeForm("AUTOTRANSACTION")
+        self.parentApp.addForm('AUTOTRANSACTION',
+                     AutoTransaction, name='Auto Transaction')
