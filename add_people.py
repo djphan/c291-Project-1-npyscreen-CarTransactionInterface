@@ -43,34 +43,46 @@ class AddPerson(npyscreen.ActionForm):
                 title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
 
-        # deal with float for weight
-        try:
-            # if user provides a height
-            # try to convert height to float
-            # if we get an error notify
-            self.float_height = float(self.height.value)
-        except ValueError:
-            npyscreen.notify_confirm("Height must be a number.", title="Error", 
-                form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
-        
-        # deal with float for weight.
-        try:
-            # if user provides a weight
-            # try to convert weight to float
-            # if we get an error notify
-            self.float_weight = float(self.weight.value)
-        except ValueError:
-            npyscreen.notify_confirm("Weight must be a number.", title="Error", 
-                form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
-
+        # if user entered a height ensure we van convert to float.
+        if self.height.value:
+            # deal with float for weight
+            try:
+                # if user provides a height
+                # try to convert height to float
+                # if we get an error notify
+                self.height.value = float(self.height.value)
+            except ValueError:
+                npyscreen.notify_confirm("Height must be a number.", title="Error", 
+                    form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                return False
+      
+        # if user entered a weight ensure we van convert to float.
+        if self.weight.value: 
+            # deal with float for weight.
+            try:
+                # if user provides a weight
+                # try to convert weight to float
+                # if we get an error notify
+                self.weight.value = float(self.weight.value)
+            except ValueError:
+                npyscreen.notify_confirm("Weight must be a number.", title="Error", 
+                    form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                return False
         
         # force user to select M/F for primary gender
         if  not self.gender.value:
             npyscreen.notify_confirm("You must indicate gender.",
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
+        
+        # if an address is provided 
+        if self.addr.value:
+            try:
+                self.gender.value = str(self.gender.values[self.gender.value[0]]).lower()   
+            except AttributeError:
+                npyscreen.notify_confirm("You must provide a properly formatted date",
+                    title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                return False
 
         return True 
 
@@ -83,13 +95,13 @@ class AddPerson(npyscreen.ActionForm):
         # send data to db
         entry_dict = {"sin"       :str(self.sin.value),
                   "name"          :str(self.name.value),
-                  "height"        :self.float_height,
-                  "weight"        :self.float_weight,
+                  "height"        :self.height.value,
+                  "weight"        :self.weight.value,
                   "eyecolor"      :str(self.eye_color.value),
                   "haircolor"     :str(self.hair_color.value),
                   "addr"          :str(self.addr.value),
                   "gender"      :str(self.gender.values[self.gender.value[0]]).lower(), 
-                  "birthday"      :self.birthday.value.strftime("%d-%b-%y")}
+                  "birthday"      :self.birthday.value}
                    
 
         insert = """
