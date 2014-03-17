@@ -136,6 +136,11 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
             npyscreen.notify_confirm(str(error), title="Status", 
                 form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return
+
+        # if we get here we have a succesfull entry. Notify the user.
+        npyscreen.notify_confirm("Success!", title="Status", 
+            form_color='STANDOUT', wrap=True, wide=False, editw=1)
+
         self.parentApp.switchFormPrevious()
                                                 
     def on_cancel(self):
