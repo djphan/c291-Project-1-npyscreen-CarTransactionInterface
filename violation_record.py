@@ -1,15 +1,6 @@
 import npyscreen
 import datetime
 
-"""
-Plan: 
-1. Process input from form into values dictionary {argument:(tuple of arguments?)}
-Idea: part of database methods?
-2. Create a popup menu to confirm submission at OK
-3. If ok, execute input processing
-4. Clear fields and restart form.
-"""
-
 class ViolationRecord(npyscreen.ActionForm):
 
     def create(self):
