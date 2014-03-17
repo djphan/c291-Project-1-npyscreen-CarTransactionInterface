@@ -22,7 +22,6 @@ Other TO-DO's:
     ViolationRecord
     DriverLicence       <-- Jon will finish Monday with TA(BLOB issue)
     NewVehicleRegistration?? (at least mostly done) <-- Jon (near completion)
-    Fix BLOB uploading                <-- Jon will discuss with TA on Monday
     Create add_people form            <-- Jon 
 
   <add other TODO's here if you have any>
