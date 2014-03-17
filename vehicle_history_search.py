@@ -1,7 +1,7 @@
 import npyscreen
 
 # Why Formbase Carl? ***
-class VehicleHistorySearch(npyscreen.FormBaseCarl):
+class VehicleHistorySearch(npyscreen.ActionFormCarl):
     def create(self):
         self.chooser = self.add(npyscreen.SelectOne, max_height=2,
                                 scroll_exit=True)
