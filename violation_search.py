@@ -44,7 +44,7 @@ class ViolationSearch(npyscreen.ActionFormCarl):
                 SELECT t.ticket_no, t.violator_no, t.vehicle_id, t.office_no, t.vtype,
                     t.vdate, t.place, t.descriptions, tt.fine
                 FROM ticket t, ticket_type tt
-                WHERE tt.vtype = t.vtype
+                WHERE tt.vtype (+)= t.vtype
                       AND UPPER(t.violator_no) = UPPER(:violator_no)
             """
             # pdb.set_trace()
@@ -57,9 +57,9 @@ class ViolationSearch(npyscreen.ActionFormCarl):
                 SELECT t.ticket_no, t.violator_no, t.vehicle_id, t.office_no, t.vtype,
                     t.vdate, t.place, t.descriptions, tt.fine
                 FROM ticket t, ticket_type tt, drive_licence d
-                WHERE tt.vtype = t.vtype
+                WHERE tt.vtype (+)= t.vtype
                       AND UPPER(d.licence_no) = UPPER(:licence_no)
-                      AND d.sin = t.violator_no
+                      AND d.sin (+)= t.violator_no
             """
             results = self.parentApp.db.query({"licence_no":self.user_query.
                 value.ljust(15, ' ')}, query)
