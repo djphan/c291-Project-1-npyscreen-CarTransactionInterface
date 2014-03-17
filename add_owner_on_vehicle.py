@@ -15,7 +15,7 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
                                             begin_entry_at=25)
         # if self.parentApp.serial_no:
             # self.vehicle_id.value = self.parentApp.serial_no
-
+         
     def validate_forms(self):
         # ensure sin is not left blank
         if self.owner_id.value == '':
