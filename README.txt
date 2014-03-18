@@ -23,9 +23,10 @@ If you want to work on one of them please make a note here so we don't end up do
 
 Other TO-DO's:
   Finish error checking/validation for:
-    ViolationRecord     <--}
-                           } Finishing error checking validation, will add people form where needed - Carl 
-    AutoTransaction     <--}
+    ViolationRecord     <--} Finishing error checking validation, 
+                           } will add people form where needed  
+    AutoTransaction     <--} once it's ready - Carl
+    
     DriverLicence       <-- Jon will finish Monday with TA(BLOB issue)
     NewVehicleRegistration?? (at least mostly done) <-- Jon (near completion)
     Create add_people form            <-- Jon 
@@ -40,5 +41,12 @@ worked on this already. If not I will fix it up.
 Dan: Year may be accidently constrained. I can fix it up after I work on the other Stuff. 
 Let me know what other fields should allow for NULL values. Though type ID should be a
 foregin key and serial_no is a primary key.
+
+Carl: In the "Add Owner" popup, do we need the Vehicle ID field? Shouldn't it be the same 
+as the Serial No entered on the NVR form? Also we need to make sure there is exactly one 
+primary owner... any ideas   on how to do that? I'm thinking either grey out the 'primary'
+choice once a primary owner has been selected, or enforce that the first new owner entered 
+is the primary (Enter Primary Owner: ________ ) and then have an 'Add Secondary Owner'
+button?
 
 
