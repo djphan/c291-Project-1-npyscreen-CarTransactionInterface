@@ -5,6 +5,7 @@ class DriverSearch(npyscreen.ActionFormCarl):
         self.chooser = self.add(npyscreen.SelectOne, max_height=2,
                                 scroll_exit=True)
         self.chooser.values = ["Search by name", "Search by licence number"]
+
         self.nextrely+=1
         # NOTE: When an entry is selected, the value of self.chooser.value will
         # be a list containing the index of the entry in the above list - in
