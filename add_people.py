@@ -122,10 +122,6 @@ class AddPerson(npyscreen.ActionForm):
             form_color='STANDOUT', wrap=True,
             wide=False, editw=1)
         
-        # stick the sin onto the parent app so we can access it the 
-        # the form we return to.
-        self.parentApp.sinForAddOwner = self.sin.value
-
         # teleport us to the form from which we came!
         self.parentApp.switchFormPrevious() 
 

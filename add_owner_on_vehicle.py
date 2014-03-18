@@ -41,24 +41,44 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
                 title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # force them to select yes/no for primary owner
+        # I don't think we need to enforce a primary selection
+        # only the rules in the test scenarios which are enforced below.
+        """
+        # Ensure that if no other owners exist the new owner must be reg as primary.
         if  not self.is_primary_owner.value:
             npyscreen.notify_confirm("You must indicate if the owner is primary",
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
+        """
+
+        # primary check block.
+        # first make sure we don't index into an empty list.
+        try:
+            is_primary_sel = self.is_primary_owner.values[self.is_primary_owner.value[0]]
+        except IndexError:
+            npyscreen.notify_confirm("Please specify primary or non-primary.", 
+            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
         
-        # if they select primary owner, ensure no other primary owner on the vehicle
-        # exists in the database, this is just to provide a clear message to the user.
-        if self.is_primary_owner.values[self.is_primary_owner.value[0]] == 'Y':
-            query = "SELECT count(*) FROM owner where vehicle_id = :v_id \
-                and owner_id = :o_id and is_primary_owner = :primary"
-            query_dict = {'v_id':self.vehicle_id.value.ljust(15, ' '),
-                          'o_id':self.owner_id.value.ljust(15, ' '),
-                          'primary':'y'}
-            if self.parentApp.db.query(query_dict, query)[0][0] >= 1:
-                npyscreen.notify_confirm("This vehicle already has a primary owner registered", 
-                title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-                return False
+        # prep query for whether primary owner exists on the vehicle.
+        query = "SELECT count(*) FROM owner where vehicle_id = :v_id \
+            and is_primary_owner = :primary"
+
+        query_dict = {'v_id':self.vehicle_id.value.ljust(15, ' '),
+                      'primary':'y'}
+        
+        # if primary owner is already registered don't allow them to register a second.
+        if self.parentApp.db.query(query_dict, query)[0][0] >= 1 and is_primary_sel == 'Y':
+            npyscreen.notify_confirm("This vehicle already has a primary owner registered", 
+            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
+
+        # ensure if no primary is registered they are made to be primary.
+        elif self.parentApp.db.query(query_dict, query)[0][0] == 0 \
+            and is_primary_sel == 'N':
+            npyscreen.notify_confirm("The first owner must be a primary owner.", 
+            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            return False
 
         return True 
 
@@ -95,10 +115,13 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
             self.editing = True
             return
 
+        # get the is primary y/n value
+        is_prim = str(self.is_primary_owner.values[self.is_primary_owner.value[0]]).lower()
+
         # send data to db
         values = {"owner_id"          :str(self.owner_id.value),
                   "vehicle_id"        :str(self.vehicle_id.value),
-                  "is_primary_owner"  :str(self.is_primary_owner.values[self.is_primary_owner.value[0]]).lower()} 
+                  "is_primary_owner"  :is_prim}
         
         prepare = "INSERT INTO owner VALUES (:owner_id, :vehicle_id, :is_primary_owner)"
         error = self.parentApp.db.insert(values, prepare)
@@ -113,7 +136,6 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
             wide=False, editw=1)
 
         # nice to have: append added owners to the vehicle registration form.
-
         self.parentApp.switchFormPrevious() 
 
     def on_cancel(self):
