@@ -9,7 +9,7 @@ class ViolationRecord(npyscreen.ActionForm):
         self.nextrely += 1
 
         self.sin = self.add(npyscreen.TitleText, name='Violator SIN:',begin_entry_at=20)
-        self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial:', begin_entry_at=20)
+        self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial No:', begin_entry_at=20)
         self.button10 = self.add(npyscreen.ButtonPress, name = "Use Vehicle's Primary Owner SIN")
         self.button10.whenPressed = self.button_press_primaryid
         self.officer_no = self.add(npyscreen.TitleText, name='Officer ID:', begin_entry_at=20)
