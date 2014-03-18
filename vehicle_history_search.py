@@ -1,4 +1,5 @@
 import npyscreen
+import math
 
 class VehicleHistorySearch(npyscreen.ActionFormCarl):
     def create(self):
@@ -47,10 +48,6 @@ class VehicleHistorySearch(npyscreen.ActionFormCarl):
                 editw=1, title='Error')
             return
 
-        # Notify user of how many results they have
-        npyscreen.notify_confirm("Found {} results".format(len(results)), 
-            editw=1, title='Results')
-
         # begin the resuls with a new line
         self.results.values = ['\n']
         joined = dict()
@@ -64,7 +61,12 @@ class VehicleHistorySearch(npyscreen.ActionFormCarl):
             # iterate through each column in the record
             joined[record_no] = list()
             for column_no in range(len(record)):
-                if record[column_no] != None:
+                if column_no == 2:
+                    # format column name
+                    c_name = column_name[column_no][0].replace("_", " ").lower().capitalize()+':'
+                    joined[record_no].append(
+                        "{0: <20} ${1}\n".format(c_name, str(round(record[column_no],2))))
+                elif record[column_no] != None:
                     # format column name
                     c_name = column_name[column_no][0].replace("_", " ").lower().capitalize()+':'
                     joined[record_no].append(
