@@ -23,7 +23,9 @@ If you want to work on one of them please make a note here so we don't end up do
 
 Other TO-DO's:
   Finish error checking/validation for:
-    ViolationRecord
+    ViolationRecord     <--}
+                           } Finishing error checking validation, will add people form where needed - Carl 
+    AutoTransaction     <--}
     DriverLicence       <-- Jon will finish Monday with TA(BLOB issue)
     NewVehicleRegistration?? (at least mostly done) <-- Jon (near completion)
     Create add_people form            <-- Jon 
