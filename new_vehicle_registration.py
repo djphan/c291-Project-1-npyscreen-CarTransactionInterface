@@ -18,17 +18,6 @@ class NewVehicleRegistration(npyscreen.ActionForm):
         self.parentApp.switchForm("ADDOWNERONVEHICLE")
 
     def process_data(self):
-        # jons modifications, delete if whoever you are, you have fixed issues
-        # without pushing.
-        try:
-            int(self.year.value)
-            int(self.type_id.value)
-        except ValueError:
-            npyscreen.notify_confirm("Year and type id must be integers.",
-                title="Type id error", form_color='STANDOUT', wrap=True, 
-                wide=False, editw=1)
-            return False
-
         # For year and type_id cast to int if possible
         self.values = {'serial_no': self.serial_no.value,
                        'maker': self.maker.value,
@@ -49,51 +38,49 @@ class NewVehicleRegistration(npyscreen.ActionForm):
                                               :type_id) """
 
     def validate_entries(self):
-        # Check if serial_no is in existing database
+        # check type_id and year separately, but not if they're left
+        # blank (to allow NULL values)
+        try:
+            if not self.year.value == '':
+                int(self.year.value)
+        except ValueError:
+            npyscreen.notify_confirm("Year must be an integer.",
+                title="Error", form_color='STANDOUT', wrap=True, 
+                wide=False, editw=1)
+            return False
+
+        try:
+            if not self.type_id.value == '':
+                int(self.type_id.value)
+        except ValueError:
+            npyscreen.notify_confirm("Type ID must be an integer.",
+                                     title="Error", form_color='STANDOUT', wrap=True, 
+                                     wide=False, editw=1)
+            return False
+
+        # check if serial_no is in existing database
         query = "SELECT count(SERIAL_NO) FROM vehicle where SERIAL_NO = :serial_no"
         if self.parentApp.db.query({'serial_no' : self.serial_no.value.ljust(15, ' ')}, query)[0][0]:
             npyscreen.notify_confirm("Serial no already exists in database.", title="Serial no error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # Check if type_id entered as a string, if so return error
-        try: 
-            if self.type_id.value != '':
-                int(self.type_id.value)
-
-        except ValueError:
-            npyscreen.notify_confirm("Vehicle type ID not a valid number.", title="type_id Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
-
-        # Check if type_id is in existing database
-        # Dan Note: Does not work right now. Registers all type_ids as invalid. Check query???
-        query = "SELECT count(type_id) FROM vehicle_type where type_id = :type_id"
-        if self.parentApp.db.query({'type_id' : int(self.type_id.value)}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Vehicle Type ID does not exist in database.", title="Type id error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
+        if not self.type_id.value == '':
+            query = "SELECT count(type_id) FROM vehicle where type_id = :type_id"
+            if self.parentApp.db.query({'type_id' : int(self.type_id.value)}, query)[0][0] == 0:
+                npyscreen.notify_confirm("Vehicle Type ID does not exist in database.", title="Type ID Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                return False
 
         return True
  
     def on_ok(self):
-        try:
-            # are all the forms filled?
-            assert all([self.serial_no.value])
-            # can price be converted to a float (with optional '$') ?
-            if self.year.value != '':
-                int(self.year.value)
-
-        except AssertionError:
-            npyscreen.notify_confirm("Please fill in a Serial no. Field left blank", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+        
+        if not self.serial_no.value:
+            npyscreen.notify_confirm("Please fill in a Serial no.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             self.editing = True
             return        
 
-        except ValueError:
-            npyscreen.notify_confirm("Year is not a valid number.", title="Year Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            self.editing = True
-            return 
-
         if not self.validate_entries():
             self.editing = True
-            npyscreen.notify_confirm("Yes", title="Year Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return
 
         entry_dict = self.process_data()
@@ -101,8 +88,7 @@ class NewVehicleRegistration(npyscreen.ActionForm):
         error = self.parentApp.db.insert(entry_dict, insert)
 
         if error:
-            # handle error
-            # don't return to main menu
+            # handle error, then return to form.
             self.editing = True
             npyscreen.notify_confirm(str(error), title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return
@@ -112,5 +98,5 @@ class NewVehicleRegistration(npyscreen.ActionForm):
         self.parentApp.switchForm('NEWVEHICLEREGISTRATION')
 
     def on_cancel(self):
-        self.parentApp.switchFormPrevious()
+        self.parentApp.switchForm('MAIN')
 
