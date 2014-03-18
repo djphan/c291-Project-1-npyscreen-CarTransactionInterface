@@ -38,6 +38,7 @@ class Database:
         except cx_Oracle.DatabaseError as exc:
             # return error arguments if an error occurs, else return None
             error = exc.args[0]
+            # npyscreen.notify_confirm(str(values_dict)+'\n'+str(prepare_statement), title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return error
         # if TitleTextno error, then return the database results
         rv = self.cursor.fetchall()

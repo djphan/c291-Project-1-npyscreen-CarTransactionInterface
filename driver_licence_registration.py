@@ -5,7 +5,6 @@ import os
 class DriverLicenceRegistration(npyscreen.ActionForm):
     def create(self):
         self.licence_no = self.add(npyscreen.TitleText, 
-                                            color="STANDOUT",
                                             name='Licence no:',
                                             begin_entry_at=20)
         self.nextrely += 1
@@ -26,10 +25,10 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
                                             allowClear=True,
                                             begin_entry_at=20)
 
-        # get a unique licence id number and auto display?
-        # more issues because field is varchar
+        # # get a unique licence id number and auto display?
+        # # more issues because field is varchar
         # query = "SELECT MAX(licence_no) FROM drive_licence"
-        # increment max to get unique licence_no
+        # # increment max to get unique licence_no
         # self.licence_no.value = self.parentApp.db.query({}, query)[0][0]
         
     def validate_forms(self):
@@ -50,7 +49,7 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
 
         # ensure sin exists in people table
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.sin.value}, query)[0][0] == 0:
+        if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] == 0:
             npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
@@ -63,11 +62,11 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # ensure class is not empty
-        if self.licence_class.value == '':
-            npyscreen.notify_confirm("Please enter a licence class", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
+        # # ensure class is not empty
+        # if self.licence_class.value == '':
+        #     npyscreen.notify_confirm("Please enter a licence class", 
+        #     title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+        #     return False
 
         # ensure file path for image is valid
         if not os.path.isfile(self.photo.value):
@@ -77,6 +76,10 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
                                     wide=False, editw=1)
             return False 
 
+
+                                   # What kind of comparison is ">" doing here?
+                                   # If it's just checking by string comparison
+                                   # then that could be a problem...
         # check that issue precedes expiry
         if self.issuing_date.value > self.expiring_date.value:
             npyscreen.notify_confirm("Issue date must precede expiry date.", 

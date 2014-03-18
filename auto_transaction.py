@@ -95,15 +95,6 @@ class AutoTransaction(npyscreen.FormBaseNew):
         # do all sellers own vehicle?
         query = "SELECT COUNT(*) FROM owner WHERE owner_id = :o_id AND vehicle_id = :v_id"
         for seller in self.sellers.values:
-            # error = self.parentApp.db.query({'o_id':seller.strip('\n').ljust(15, ' '),
-            #                             'v_id':self.vehicle.value}, query)
-            # if error:
-            #     # don't return to main menu
-            #     self.editing = True
-            #     # print error to screen
-            #     npyscreen.notify_confirm(str(error), title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            #     return
-
             if self.parentApp.db.query({'o_id':seller.strip('\n').ljust(15, ' '),
                                         'v_id':self.vehicle.value.strip('\n').ljust(15, ' ')}, query)[0][0] == 0:
                 npyscreen.notify_confirm("Seller %s cannot sell vehicle %s because he/she is not a registered owner."%(seller,self.vehicle.value), title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
@@ -115,7 +106,8 @@ class AutoTransaction(npyscreen.FormBaseNew):
             if self.parentApp.db.query({'sin':buyer.strip('\n').ljust(15, ' ')}, query)[0][0] == 0:
                 npyscreen.notify_confirm("Buyer %s not in database."%buyer, title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 # if not, prompt to enter buyer information, then add buyer to database and continue
-                return False
+                
+                
 
         return True
             
