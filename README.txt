@@ -13,7 +13,6 @@ https://eclass.srv.ualberta.ca/mod/forum/discuss.php?d=329146
 https://eclass.srv.ualberta.ca/mod/page/view.php?id=998610
 We will have to alter some things to comply with these new requirements. Nothing too major though.
 
-TO DO:
  	driver_search.py            <--- done
  	vehicle_history_search.py   <- Dan
  	violation_search.py         <--- Jon (near completion)
@@ -48,5 +47,42 @@ primary owner... any ideas   on how to do that? I'm thinking either grey out the
 choice once a primary owner has been selected, or enforce that the first new owner entered 
 is the primary (Enter Primary Owner: ________ ) and then have an 'Add Secondary Owner'
 button?
+#---------------------------------------------------------------------------------
+# Manual - Auto Transaction Database Interface
+#
+# Table of Contents:
+# i. Login
+# ii. Database Entry Modules
+#     ii.a.
+#     ii.b.
+#     ii.c. 
+#     ii.d. Violation Record
+# iii. Search
+#     iii.a.
+#     iii.b.
+#     iii.c.
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# ii.d. Violation Record
+#---------------------------------------------------------------------------------
+
+Violation record will allow the user to enter data into the ticket table. 
+i. The basic form will allow the officer to input any driver they pull over to record
+the ticket. 
+
+ii. If the officer does not know the Violator SIN, he is able to pull up
+the primary owner of the vehicle in question using the 'Use Vehicle's Primary Owner SIN'
+button. This will query the database to obtain, and autofill the Violator SIN field with
+the primary owner's SIN. The Violator SIN field will be overrode if this option is used
+if there were any previous values entered into the field.
+
+The following fields are required: (1) Violator SIN (2) Vehicle Serial No 
+(3) Officer SIN and (4) Violation Type due to the constraints of the database.
+
+Both SIN numbers, Vehicle Serial No, and Violation type must match pre-entered 
+data in the database. 
+
+
 
 
