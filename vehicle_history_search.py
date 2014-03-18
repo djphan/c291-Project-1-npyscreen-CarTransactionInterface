@@ -43,7 +43,7 @@ class VehicleHistorySearch(npyscreen.ActionFormCarl):
 
         # If we get an empty list as a query result notify the user
         if not results:
-            npyscreen.notify_confirm("No results were found for your query.", 
+            npyscreen.notify_confirm("No results were found for your query. Vehicle Serial No does not exist in database", 
                 editw=1, title='Error')
             return
 
@@ -55,6 +55,20 @@ class VehicleHistorySearch(npyscreen.ActionFormCarl):
         self.results.values = ['\n']
         joined = dict()
          
+        #for line in results:
+        #    if not line[4] in joined:
+        #        joined[line[4]] = list()
+        #        joined[line[4]].append("Vehicle Serial No: %s\n"%line[0])                              
+        #        joined[line[4]].append("Number of Transactions: %s\n"%(line[1], "N/A")[not line[1]])
+        #        joined[line[4]].append("Average Selling Price: %s\n"%(line[2], "N/A")[not line[2]])
+        #        joined[line[4]].append("Number of Tickets on Record: %s\n"%((line[3], "N/A")[not line[3]]))
+        #        joined[line[4]].append('\n')
+
+        #for record in joined:
+        #    self.results.values.extend(joined[record])
+        #npyscreen.notify_confirm(str(len(joined))+" result"+('s','')[len(joined)==1]+" found.", editw=1, title='')
+
+
         # get column names for printing 
         column_name = self.parentApp.db.cursor.description
        

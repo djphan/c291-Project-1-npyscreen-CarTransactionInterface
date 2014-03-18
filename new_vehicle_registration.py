@@ -3,7 +3,7 @@ import npyscreen
 class NewVehicleRegistration(npyscreen.ActionForm):
     def create(self):
 
-        self.serial_no = self.add(npyscreen.TitleText, name='Serial no:')
+        self.serial_no = self.add(npyscreen.TitleText, name='Serial No:')
         self.maker = self.add(npyscreen.TitleText, name='Maker:')
         self.model = self.add(npyscreen.TitleText, name='Model:')
         self.year = self.add(npyscreen.TitleText, name='Year:')
