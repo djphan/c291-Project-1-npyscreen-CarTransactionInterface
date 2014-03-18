@@ -6,8 +6,17 @@ class AddBuyer(npyscreen.ActionPopup):
         self.buyer_id = self.add(npyscreen.TitleText, name="Buyer ID:")
 
     def on_ok(self):
+        
+        # is this buyer in the database?
+        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
+        
+        if self.parentApp.db.query({'sin':self.buyer_id.value.strip('\n').ljust(15, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Buyer %s not in database.\nPlease enter buyer information."%buyer, title="Alert", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                # if not, prompt to enter buyer information, then add buyer to database and continue
+            self.parentApp.AP_default = self.buyer_id.value
+            self.parentApp.switchForm("ADDPERSON")
+
         self.parentApp.AT_buyers.append(self.buyer_id.value)
-        self.parentApp.switchForm("AUTOTRANSACTION")
 
     def on_cancel(self):
         self.parentApp.switchForm("AUTOTRANSACTION")
@@ -100,12 +109,6 @@ class AutoTransaction(npyscreen.FormBaseNew):
                 npyscreen.notify_confirm("Seller %s cannot sell vehicle %s because he/she is not a registered owner."%(seller,self.vehicle.value), title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
 
-        # are all buyers in database? 
-        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
-        for buyer in self.buyers.values:
-            if self.parentApp.db.query({'sin':buyer.strip('\n').ljust(15, ' ')}, query)[0][0] == 0:
-                npyscreen.notify_confirm("Buyer %s not in database."%buyer, title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-                # if not, prompt to enter buyer information, then add buyer to database and continue
                 
                 
 

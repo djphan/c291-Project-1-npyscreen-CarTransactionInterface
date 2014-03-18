@@ -6,6 +6,18 @@ import pdb
 class AddPerson(npyscreen.ActionForm):
     def create(self):
         self.sin = self.add(npyscreen.TitleText, name='SIN')
+
+        # (Carl) - Added ability for AddPerson to take a default SIN:
+        #   For example, this form is accessed by Auto Transaction when the user
+        #   enters a buyer not in the database. Auto Transaction will pass this
+        #   new SIN to parentApp.AP_default for use here. If no value is passed,
+        #   then self.sin will still be editable.
+        if self.parentApp.AP_default is not None:
+            self.sin.value = self.parentApp.AP_default
+            self.parentApp.AP_default = None
+            self.sin.editable = False
+            self.sin.color = "STANDOUT"
+            
         self.name = self.add(npyscreen.TitleText, name='Name')
         self.height = self.add(npyscreen.TitleText, name='Height') 
         self.weight = self.add(npyscreen.TitleText, name='Weight') 
