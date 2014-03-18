@@ -16,7 +16,7 @@ class ViolationSearch(npyscreen.ActionFormCarl):
         self.user_query = self.add(npyscreen.TitleText, name="Search Query:",
                                    begin_entry_at=15, use_two_lines=False, 
                                    field_width=54)
-        self.nextrely-=1
+        self.nextrely-=1   
         self.query_confirm = self.add(npyscreen.ButtonPress, name="OK", relx=70)
         self.query_confirm.whenPressed = self.process_query
 

@@ -31,6 +31,11 @@ class DriverSearch(npyscreen.ActionFormCarl):
                                      title='Error')
             return
 
+        if not self.user_query.value:
+            npyscreen.notify_confirm("Please enter a Name or Licence Number.", 
+                editw=1, title='Error')
+            return
+
         if self.chooser.value[0] == 0:
             query = """
 SELECT p.name, l.licence_no, p.addr, p.birthday, l.class, c.c_id, 
@@ -54,6 +59,13 @@ WHERE p.sin = l.sin(+) AND
       UPPER(l.licence_no) = UPPER(:licence_no)
             """
             results = self.parentApp.db.query({"licence_no":self.user_query.value.ljust(15, ' ')}, query)
+
+        # if we get an empty list as a query result notify the user
+        if not results:
+            npyscreen.notify_confirm("No results were found for your query. Either Name or Licence Number does not exist in database.", 
+                editw=1, title='Error')
+            return
+
 
         self.results.values = ['\n']
         joined = dict()

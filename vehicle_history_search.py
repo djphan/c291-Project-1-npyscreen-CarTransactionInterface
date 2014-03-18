@@ -61,19 +61,18 @@ class VehicleHistorySearch(npyscreen.ActionFormCarl):
             # iterate through each column in the record
             joined[record_no] = list()
             for column_no in range(len(record)):
-                if column_no == 2:
+                if record[column_no] != None:
                     # format column name
                     c_name = column_name[column_no][0].replace("_", " ").lower().capitalize()+':'
-                    joined[record_no].append(
-                        "{0: <20} ${1}\n".format(c_name, str(round(record[column_no],2))))
-                elif record[column_no] != None:
-                    # format column name
-                    c_name = column_name[column_no][0].replace("_", " ").lower().capitalize()+':'
-                    joined[record_no].append(
+                    if column_no == 2:
+                        joined[record_no].append(
+                            "{0: <20} ${1}\n".format(c_name, str(round(record[column_no],2))))
+                    else:
+                        joined[record_no].append(
                         "{0: <20} {1}\n".format(c_name, str(record[column_no])))
                 else:
                     c_name = column_name[column_no][0].replace("_", " ").lower().capitalize()+':'
-                    joined[record_no].append("{0: <20}{1}\n".format(c_name, "N/A"))
+                    joined[record_no].append("{0: <20} {1}\n".format(c_name, "N/A"))
 
             joined[record_no].append('\n')
             # append the result to the form

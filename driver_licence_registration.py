@@ -1,4 +1,5 @@
 import npyscreen
+import datetime
 import cx_Oracle
 import os 
 
@@ -76,10 +77,11 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
                                     wide=False, editw=1)
             return False 
 
-
-                                   # What kind of comparison is ">" doing here?
-                                   # If it's just checking by string comparison
-                                   # then that could be a problem...
+        # CHECK!!
+        if self.issuing_date.value is None:
+            self.issuing_date.value = datetime.date.today()
+        if self.expiring_date.value is None:
+            self.expiring_date.value = self.issuing_date.value + datetime.timedelta(days=1826) 
         # check that issue precedes expiry
         if self.issuing_date.value > self.expiring_date.value:
             npyscreen.notify_confirm("Issue date must precede expiry date.", 
@@ -122,6 +124,7 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
                                             :class, :photo,
                                             :issuing_date,
                                             :expiring_date)"""
+
         entry_dict = {'licence_no':str(self.licence_no.value), 
                       'sin':str(self.sin.value),
                       'class':str(self.licence_class.value),

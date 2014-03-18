@@ -14,6 +14,7 @@ https://eclass.srv.ualberta.ca/mod/page/view.php?id=998610
 We will have to alter some things to comply with these new requirements. Nothing too major though.
 
  	driver_search.py            <--- done
+    Dan: Added some error checking to driver search, double check the work.
  	vehicle_history_search.py   <- Dan (mostly done, can you guys run tests to see if you can break this form?)
  	violation_search.py         <--- Jon (near completion)
  	
@@ -27,6 +28,7 @@ Other TO-DO's:
     AutoTransaction     <--} once it's ready - Carl
     
     DriverLicence       <-- Jon will finish Monday with TA(BLOB issue)
+                        < -- Dan/Carl: Double check date time error
     NewVehicleRegistration?? (at least mostly done) <-- Jon (near completion)
     Create add_people form            <-- Jon 
 
@@ -47,6 +49,7 @@ primary owner... any ideas   on how to do that? I'm thinking either grey out the
 choice once a primary owner has been selected, or enforce that the first new owner entered 
 is the primary (Enter Primary Owner: ________ ) and then have an 'Add Secondary Owner'
 button?
+
 
 
 #---------------------------------------------------------------------------------
