@@ -9,7 +9,6 @@ __________________________|
 Dan: The due date got pushed back to Friday 6:00 PM (in case things come up) but lets finish early.
 https://eclass.srv.ualberta.ca/mod/forum/discuss.php?d=329146
 
-
 !!! Test cases are up:
 https://eclass.srv.ualberta.ca/mod/page/view.php?id=998610
 We will have to alter some things to comply with these new requirements. Nothing too major though.
@@ -23,7 +22,8 @@ If you want to work on one of them please make a note here so we don't end up do
 
 Other TO-DO's:
   Finish error checking/validation for:
-    ViolationRecord     <--} Finishing error checking validation, 
+    ViolationRecord     <--} Dan: Primary key Updated. Can either of you use your database to test for additional
+                             Cases. Will double check date a little later.
                            } will add people form where needed  
     AutoTransaction     <--} once it's ready - Carl
     
