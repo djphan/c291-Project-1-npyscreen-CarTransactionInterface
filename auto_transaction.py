@@ -29,18 +29,20 @@ class AutoTransaction(npyscreen.FormBaseNew):
         self.t_id    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                                 name="Transaction ID:", begin_entry_at=20,
                                 editable=False, color="STANDOUT")
-        self.nextrely+=1; self.nextrelx-=2
-        self.add_seller = self.add(npyscreen.ButtonPress, name="Add Seller", width=10)
-        self.add_seller.whenPressed = lambda: self.parentApp.switchForm("ADDSELLER")
-        self.add_buyer = self.add(npyscreen.ButtonPress, name="Add Buyer", width=10)
-        self.add_buyer.whenPressed = lambda: self.parentApp.switchForm("ADDBUYER")
-        self.nextrelx+=2
+        self.nextrely+=1;
         self.vehicle = self.add(npyscreen.TitleText, use_two_lines=False,
                                 name='Vehicle Serial no:', begin_entry_at=20)
         self.date    = self.add(npyscreen.TitleDateCombo,
                                 name='Date:', begin_entry_at=20)
         self.price   = self.add(npyscreen.TitleText,
                                 name='Price:', begin_entry_at=20)
+        self.nextrelx-=2
+        self.add_seller = self.add(npyscreen.ButtonPress, name="Add Seller", width=10)
+        self.add_seller.whenPressed = lambda: self.parentApp.switchForm("ADDSELLER")
+        self.add_buyer = self.add(npyscreen.ButtonPress, name="Add Buyer", width=10)
+        self.add_buyer.whenPressed = lambda: self.parentApp.switchForm("ADDBUYER")
+        self.nextrelx+=2
+
         self.nextrelx-=2; self.nextrely+=1
         self.submit_button = self.add(npyscreen.ButtonPress, name="Submit", width=10)
         self.submit_button.whenPressed = self.on_ok
@@ -50,16 +52,23 @@ class AutoTransaction(npyscreen.FormBaseNew):
         self.nextrelx-=8
 ############
         self.nextrely+=1
-        self.sellersTitle = self.add(npyscreen.TitleFixedText, name="Seller(s):", editable=False, max_width=12)
-        self.nextrely-=1; self.nextrelx+=40
-        self.buyersTitle = self.add(npyscreen.TitleFixedText, name="Buyer(s):", editable=False, max_width=12)
-        self.nextrely-=1; self.nextrelx-=20
-        self.sellers = self.add(npyscreen.Pager, name="sellers", height=10,
-                                max_height=10, width=16, max_width=16, scroll_exit=True, slow_scroll=True, exit_left=True, exit_right=True)
+        self.PsellersTitle = self.add(npyscreen.TitleFixedText, name="Seller(s):", editable=False, max_width=11)
+
+        self.nextrely-=1; self.nextrelx+=12
+        self.sellers = self.add(npyscreen.Pager, name="sellers", height=10, editable=False,
+                                max_height=10, width=16, max_width=16, scroll_exit=True,
+                                slow_scroll=True, exit_left=True, exit_right=True)
         self.parentApp.AT_sellers = list()
         self.sellers.values = self.parentApp.AT_sellers
-        self.nextrely-=10; self.nextrelx+=35
-        self.buyers = self.add(npyscreen.Pager, name="buyers", height=10,
+
+
+        self.nextrely-=10; self.nextrelx+=21
+        self.buyersTitle = self.add(npyscreen.TitleFixedText, name="Primary Buyer:", editable=False, max_width=15)
+        self.nextrely-=1; self.nextrelx+=1
+        self.buyersTitle2 = self.add(npyscreen.TitleFixedText, name="Other Buyers:", editable=False, max_width=15)
+
+        self.nextrely-=2; self.nextrelx+=15
+        self.buyers = self.add(npyscreen.Pager, name="buyers", height=10, editable=False,
                                 max_height=10, width=16, max_width=16, scroll_exit=True, slow_scroll=True)
         self.parentApp.AT_buyers = list()
         self.buyers.values = self.parentApp.AT_buyers
@@ -84,13 +93,22 @@ class AutoTransaction(npyscreen.FormBaseNew):
                 return False
 
         # do all sellers own vehicle?
-        query = "SELECT COUNT(*) FROM owner WHERE owner_id = ':o_id' AND vehicle_id = :v_id"
+        query = "SELECT COUNT(*) FROM owner WHERE owner_id = :o_id AND vehicle_id = :v_id"
         for seller in self.sellers.values:
+            # error = self.parentApp.db.query({'o_id':seller.strip('\n').ljust(15, ' '),
+            #                             'v_id':self.vehicle.value}, query)
+            # if error:
+            #     # don't return to main menu
+            #     self.editing = True
+            #     # print error to screen
+            #     npyscreen.notify_confirm(str(error), title="Status", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            #     return
+
             if self.parentApp.db.query({'o_id':seller.strip('\n').ljust(15, ' '),
-                                        'v_id':self.vehicle.value}, query)[0][0] == 0:
-                npyscreen.notify_confirm("Seller %s not in database."%seller, title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                                        'v_id':self.vehicle.value.strip('\n').ljust(15, ' ')}, query)[0][0] == 0:
+                npyscreen.notify_confirm("Seller %s cannot sell vehicle %s because he/she is not a registered owner."%(seller,self.vehicle.value), title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
-        
+
         # are all buyers in database? 
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
         for buyer in self.buyers.values:
