@@ -18,6 +18,17 @@ class NewVehicleRegistration(npyscreen.ActionForm):
         self.parentApp.switchForm("ADDOWNERONVEHICLE")
 
     def process_data(self):
+        # jons modifications, delete if whoever you are, you have fixed issues
+        # without pushing.
+        try:
+            int(self.year.value)
+            int(self.type_id.value)
+        except ValueError:
+            npyscreen.notify_confirm("Year and type id must be integers.",
+                title="Type id error", form_color='STANDOUT', wrap=True, 
+                wide=False, editw=1)
+            return False
+
         # For year and type_id cast to int if possible
         self.values = {'serial_no': self.serial_no.value,
                        'maker': self.maker.value,

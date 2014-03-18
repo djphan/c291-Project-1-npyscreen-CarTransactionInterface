@@ -25,3 +25,8 @@ Other TO-DO's:
     Create add_people form            <-- Jon 
 
   <add other TODO's here if you have any>
+
+Jon's Notes:
+The new vehicle registration form is enforcing not null constraints on
+a few fields like year. Can you guys let me know if either of you have
+worked on this already. If not I will fix it up.
