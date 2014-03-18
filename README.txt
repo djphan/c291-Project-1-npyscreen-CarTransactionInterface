@@ -14,7 +14,7 @@ https://eclass.srv.ualberta.ca/mod/page/view.php?id=998610
 We will have to alter some things to comply with these new requirements. Nothing too major though.
 
  	driver_search.py            <--- done
- 	vehicle_history_search.py   <- Dan
+ 	vehicle_history_search.py   <- Dan (mostly done, can you guys run tests to see if you can break this form?)
  	violation_search.py         <--- Jon (near completion)
  	
 If you want to work on one of them please make a note here so we don't end up doing the same thing twice.
@@ -47,41 +47,74 @@ primary owner... any ideas   on how to do that? I'm thinking either grey out the
 choice once a primary owner has been selected, or enforce that the first new owner entered 
 is the primary (Enter Primary Owner: ________ ) and then have an 'Add Secondary Owner'
 button?
+
+
 #---------------------------------------------------------------------------------
 # Manual - Auto Transaction Database Interface
 #
 # Table of Contents:
 # i. Login
 # ii. Database Entry Modules
-#     ii.a.
+#     ii.a. New Vehicle Registration <-- Not Done but basic part is - Dan
 #     ii.b.
 #     ii.c. 
 #     ii.d. Violation Record
 # iii. Search
 #     iii.a.
 #     iii.b.
-#     iii.c.
+#     iii.c. Vehicle Search History
+# iv. General Information with regards to the interface
 #---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+# ii.a. New Vehicle Registration
+#---------------------------------------------------------------------------------
+# New Vehicle Registration will allow the user to enter data into the vehichle table.
+# As well the form will prompt users to add owners to the owner table, and/or people 
+# amending the people table.
+#
+# i. When adding to the new vehicle registration form, we will require the Serial No
+# and the Type ID of the vehichle. If left blank, user will return an error indicating
+# so.
+#
+
 
 #---------------------------------------------------------------------------------
 # ii.d. Violation Record
 #---------------------------------------------------------------------------------
+#
+# Violation Record will allow the user to enter data into the ticket table. 
+# i. The basic form will allow the officer to input any driver they pull over to record
+# the ticket. 
+#
+# ii. If the officer does not know the Violator SIN, he is able to pull up
+# the primary owner of the vehicle in question using the 'Use Vehicle's Primary Owner SIN'
+# button. This will query the database to obtain, and autofill the Violator SIN field with
+# the primary owner's SIN. The Violator SIN field will be overrode if this option is used
+# if there were any previous values entered into the field.
+#
+# iii. The program will auto iterate the ticket number by querying your database
+# and incrementing by 1 the maximum value we can find.
+#
+# The following fields are required: (1) Violator SIN (2) Vehicle Serial No 
+# (3) Officer SIN and (4) Violation Type due to the constraints of the database.
+#
+# Both SIN numbers, Vehicle Serial No, and Violation type must match pre-entered 
+# data in the database. 
 
-Violation record will allow the user to enter data into the ticket table. 
-i. The basic form will allow the officer to input any driver they pull over to record
-the ticket. 
 
-ii. If the officer does not know the Violator SIN, he is able to pull up
-the primary owner of the vehicle in question using the 'Use Vehicle's Primary Owner SIN'
-button. This will query the database to obtain, and autofill the Violator SIN field with
-the primary owner's SIN. The Violator SIN field will be overrode if this option is used
-if there were any previous values entered into the field.
+#---------------------------------------------------------------------------------
+# iii.c. Vehicle Search History
+#---------------------------------------------------------------------------------
+# Vehicle Search History will allow the user to search by Vehicle Serial No. When inputted, press
+# OK to obtain your results. The results will display:
+#
+# i. The number of results found
+#
+# ii. And an output listing: (1) The serial number of the vehicle, 
+# (2) the number of sales the vehicle has been in,
+# (3) the average price, and (4) the number of tickets 
 
-The following fields are required: (1) Violator SIN (2) Vehicle Serial No 
-(3) Officer SIN and (4) Violation Type due to the constraints of the database.
-
-Both SIN numbers, Vehicle Serial No, and Violation type must match pre-entered 
-data in the database. 
 
 
 

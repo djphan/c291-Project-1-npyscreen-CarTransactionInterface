@@ -62,22 +62,22 @@ class ViolationRecord(npyscreen.ActionForm):
         # validate Violator SIN:
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
         if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Invalid Violator SIN. Entered", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            npyscreen.notify_confirm("Invalid Violator SIN entered", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # validate Vehicle Serial:
+        # Validate Vehicle Serial:
         query = "SELECT COUNT(serial_no) FROM vehicle WHERE serial_no = :ser"
         if self.parentApp.db.query({'ser':self.vehicle_no.value.ljust(15, ' ')}, query)[0][0] == 0:
             npyscreen.notify_confirm("Invalid vehicle serial number. The vehicle is not registered in the database.", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # validate Officer ID (SIN):
+        # Validate Officer ID (SIN):
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
         if self.parentApp.db.query({'sin':self.officer_no.value.ljust(15, ' ')}, query)[0][0] == 0:
             npyscreen.notify_confirm("Invalid Officer ID. Officer not in people database", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # validate Violation Type:
+        # Validate Violation Type:
         query = "SELECT COUNT(vtype) FROM ticket_type WHERE vtype = :v_type"
         if self.parentApp.db.query({'v_type':self.violation_type.value.ljust(10, ' ')}, query)[0][0] == 0:
             npyscreen.notify_confirm("Invalid Violation Type. Type ID not in violation type database", title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
