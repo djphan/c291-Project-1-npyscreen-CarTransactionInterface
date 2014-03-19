@@ -186,6 +186,23 @@ Dan P: New Vehicle Registration
 # (2) the number of sales the vehicle has been in,
 # (3) the average price, and (4) the number of tickets 
 
+#---------------------------------------------------------------------------------
+# iv. General Interface Information
+#---------------------------------------------------------------------------------
+#
+# i. Note: For Date Type information, you are able to set them as 'unset' in the
+# interface. However to maintain consistant error checking for database input (for 
+# proper processing when you enter a DATE type value into Oracle) we will have 
+# 'unset' set to today's date instead of an empty string.
+#
+# For the driver licence modules, the default 'unset' values are slightly different.
+# Please refer to that section for further detail.
+#
+# ii. Before you can interact with the module, you must log into an ORACLE SERVER.
+# The default server is set to the c291 student access given in lab. The user 
+# must log in or else an error will prompt them to log in.
+
+
 
 
 
