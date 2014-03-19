@@ -11,7 +11,7 @@ class AddBuyer(npyscreen.ActionPopup):
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
         
         if self.parentApp.db.query({'sin':self.buyer_id.value.strip('\n').ljust(15, ' ')}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Buyer %s not in database.\nPlease enter buyer information."%buyer, title="Alert", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            npyscreen.notify_confirm("Buyer %s not in database.\nPlease enter buyer information."%self.buyer_id.value, title="Alert", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 # if not, prompt to enter buyer information, then add buyer to database and continue
             self.parentApp.AP_default = self.buyer_id.value
             self.parentApp.switchForm("ADDPERSON")

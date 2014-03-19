@@ -47,7 +47,7 @@ class MyApplication(npyscreen.NPSAppManaged):
                      VehicleHistorySearch, name='Vehicle History Search')
 
         # new additions for add people popup form
-        self.addFormClass('ADDPERSON', AddPerson, name='Add Person')
+        self.addFormClass('ADDPERSON', AddPerson, name='Add Person', minimum_lines=24, minimum_columns=80, lines=16, columns=60)
 
 
 class MainMenuPopup(npyscreen.ActionPopup):

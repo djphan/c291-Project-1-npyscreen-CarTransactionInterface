@@ -1,9 +1,10 @@
 import npyscreen
 import cx_Oracle
+import datetime
 import os
 import pdb
 
-class AddPerson(npyscreen.ActionForm):
+class AddPerson(npyscreen.ActionPopup):
     def create(self):
         self.sin = self.add(npyscreen.TitleText, name='SIN')
 
@@ -27,7 +28,7 @@ class AddPerson(npyscreen.ActionForm):
         self.birthday = self.add(npyscreen.TitleDateCombo, name='Birthday',
                                         allowClear=True) 
         self.gender = self.add(npyscreen.TitleSelectOne, name='Gender',
-                                            values=['M', 'F'])
+                                            values=['M', 'F'], scroll_exit=True)
     
     def validate_forms(self):
         # ensure sin is not left blank
@@ -82,17 +83,17 @@ class AddPerson(npyscreen.ActionForm):
                     form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
         
-        # if user makes a selection format the value else set it to empty string.
+        if not self.birthday.value:
+            self.birthday.value = datetime.date.today()
+
         if self.gender.value:
             # if a gender is specified format it for entry
-            self.gender.value = str(self.gender.values[self.gender.value[0]]).lower(), 
+            self.gender_choice = self.gender.get_selected_objects()[0].lower()
+        else:
+            # if no value is given, show an error.
             npyscreen.notify_confirm("You must indicate gender.",
             title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
-        else:
-
-            # if no value is given avoid indexing into the gendervalues list
-            self.gender.value = ''
 
         # if everything checks out return true.
         return True 
@@ -110,8 +111,9 @@ class AddPerson(npyscreen.ActionForm):
                   "eyecolor"      :str(self.eye_color.value),
                   "haircolor"     :str(self.hair_color.value),
                   "addr"          :str(self.addr.value),
-                  "gender"        :self.gender.value,
-                  "birthday"      :self.birthday.value}
+                  "gender"        :self.gender_choice,
+                  "birthday"      :self.birthday.value.strftime("%d-%b-%y") # formatted for oracle
+                      }
                    
 
         insert = """
