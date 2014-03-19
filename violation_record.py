@@ -20,7 +20,7 @@ class ViolationRecord(npyscreen.ActionForm):
         self.d_title    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                                 name="Description:", begin_entry_at=20,
                                 editable=False, color="STANDOUT")
-        self.description = self.add(npyscreen.MultiLineEdit, name='Description:', relx=22, rely=11)        
+        self.description = self.add(npyscreen.MultiLineEdit, name='Description:', relx=22, rely=12)        
 
         # get maximum current ticket_id
         query = "SELECT MAX(ticket_no) FROM ticket"
