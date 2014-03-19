@@ -70,24 +70,39 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         #     return False
 
         # ensure file path for image is valid
-        if not os.path.isfile(self.photo.value):
-            npyscreen.notify_confirm("You must select a valid image path", 
-                                    title="Bad image path",
-                                    form_color='STANDOUT', wrap=True,
-                                    wide=False, editw=1)
-            return False 
+        if self.photo.value:
+            if not os.path.isfile(self.photo.value):
+                npyscreen.notify_confirm("You must select a valid image path", 
+                                        title="Bad image path",
+                                        form_color='STANDOUT', wrap=True,
+                                        wide=False, editw=1)
+                return False 
+
+        """
+        I don't know about this, your forcing them to enter dates and they won't even
+        know they did. If this is critical in your opinion I think it should be displayed to
+        the user prior to entry.
 
         # CHECK!!
         if self.issuing_date.value is None:
             self.issuing_date.value = datetime.date.today()
         if self.expiring_date.value is None:
             self.expiring_date.value = self.issuing_date.value + datetime.timedelta(days=1826) 
-        # check that issue precedes expiry
-        if self.issuing_date.value > self.expiring_date.value:
-            npyscreen.notify_confirm("Issue date must precede expiry date.", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-            return False
-        
+        """
+
+        # make sure we don't try to date format an empty string.
+        if self.issuing_date.value:
+            self.issuing_date.value = self.issuing_date.value.strftime("%d-%b-%y")
+        if self.expiring_date.value:
+            self.expiring_date.value = self.expiring_date.value.strftime("%d-%b-%y")
+
+            """
+            This probably isn't neccessary.
+            if issue_date > end_date: 
+                npyscreen.notify_confirm("Issue date must precede expiry date.", 
+                title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                return False
+            """ 
         return True
 
     def on_ok(self):
@@ -96,25 +111,32 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
             return
 
         # attempt to open the image file
-        try:
-            image_file = open(self.photo.value, 'rb')
-        except IOError as exc:
-            error, = exc.args
-            npyscreen.notify_confirm(error.message, 
-                                            editw=1,
-                                            title='Image Load failure')
-            self.editing = True
-            self.editing = True
-            return
+        if self.photo.value:
+            try:
+                image_file = open(self.photo.value, 'rb')
+            except IOError as exc:
+                error, = exc.args
+                npyscreen.notify_confirm(error.message, 
+                                                editw=1,
+                                                title='Image Load failure')
+                self.editing = True
+                self.editing = True
+                return
 
         # if we are succesfull in opening, prep image for db entry
-        image = image_file.read()
+        # ensure we have an image first though.
+        if self.photo.value:
+            image = image_file.read()
 
         # photo needed to match the name of the variable in the insert stmt.
         # works properly now.
         self.parentApp.db.cursor.setinputsizes(photo=cx_Oracle.BLOB)
-        image_file.close() 
-        
+        if self.photo.value:
+            image_file.close() 
+        else:
+            # should be null value.
+            image = ''
+
         # prep and send db statement
         insert = """insert into drive_licence (licence_no, 
                                             sin, class, photo,
@@ -129,10 +151,9 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
                       'sin':str(self.sin.value),
                       'class':str(self.licence_class.value),
                       'photo':image,
-                      'issuing_date':
-                          self.issuing_date.value.strftime("%d-%b-%y"),
-                      'expiring_date':
-                          self.expiring_date.value.strftime("%d-%b-%y")}
+                      'issuing_date':self.issuing_date.value,
+                      'expiring_date':self.expiring_date.value}
+
         error = self.parentApp.db.insert(entry_dict, insert)
         # error handling
         if error:
