@@ -203,8 +203,20 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         # if we get here we have a succesfull entry. Notify the user.
         npyscreen.notify_confirm("Success!", title="Status", 
             form_color='STANDOUT', wrap=True, wide=False, editw=1)
+        self.licence_no.value = ''
+        self.sin.value = ''
+        self.licence_class.value = ''
+        self.photo.value = ''
+        self.issuing_date.value = ''
+        self.expiring_date.value = ''
 
         self.parentApp.switchFormPrevious()
                                                 
     def on_cancel(self):
+        self.licence_no.value = ''
+        self.sin.value = ''
+        self.licence_class.value = ''
+        self.photo.value = ''
+        self.issuing_date.value = ''
+        self.expiring_date.value = ''
         self.parentApp.switchForm("MAIN")

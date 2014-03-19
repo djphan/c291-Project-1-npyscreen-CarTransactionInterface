@@ -31,7 +31,7 @@ class MyApplication(npyscreen.NPSAppManaged):
 
 
 
-        self.addFormClass('DRIVERLICENCEREGISTRATION',
+        self.addForm('DRIVERLICENCEREGISTRATION',
                      DriverLicenceRegistration, name='Driver Licence Registration')
         self.addFormClass('VIOLATIONRECORD',
                      ViolationRecord, name='Violation Record')
@@ -123,6 +123,10 @@ class MainMenu(npyscreen.FormBaseNew):
         self.button6.whenPressed = buttonpress6
 
 if __name__ == "__main__":
-    app = MyApplication()
-    app.run()
+    while True:
+        try:
+            app = MyApplication()
+            app.run()
+        except:
+            pass
     print('done')
