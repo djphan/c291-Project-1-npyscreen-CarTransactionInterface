@@ -61,6 +61,7 @@ button?
 #     ii.b.
 #     ii.c. Driver Licence Registration
 #     ii.d. Violation Record
+#     ii.e. People
 # iii. Search
 #     iii.a.
 #     iii.b. Violation Search
@@ -89,7 +90,12 @@ button?
 # owner first, an error will prompt the user to enter the primary owner first.
 #
 # v. The user can continue to add any number of secondary owners after adding the first
-# primary owner.
+# primary owner. 
+#
+# vi. If the owner does not exist in the database (i.e. the SIN number is not in the database)
+# an error will be displayed and the user will be prompted to add the owner information
+# to the people's database. A new window will popup for the people's form
+#
 
 #---------------------------------------------------------------------------------
 # ii.c. Driver Licence Registration
