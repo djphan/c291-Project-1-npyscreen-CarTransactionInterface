@@ -79,13 +79,17 @@ button?
 # and the Type ID of the vehichle. If left blank, user will return an error indicating
 # so.
 # 
+# ii. The Type ID of the vehicle must match information in the database.
 # 
-# 
+# iii. After the user inputted the vehicle information, he can add owners
+# with the add owner button. The add owner button will then allow the user to
+# input the new owner's SIN, vehichle serial no, and primary owner status
 #
+# iv. The first owner MUST be the primary owner. If the user inputs a secondary
+# owner first, an error will prompt the user to enter the primary owner first.
 #
-#
-#
-#
+# v. The user can continue to add any number of secondary owners after adding the first
+# primary owner.
 
 #---------------------------------------------------------------------------------
 # ii.c. Driver Licence Registration
@@ -157,8 +161,8 @@ button?
 #---------------------------------------------------------------------------------
 # iii.c. Vehicle Search History
 #---------------------------------------------------------------------------------
-# Vehicle Search History will allow the user to search by Vehicle Serial No. When inputted, press
-# OK to obtain your results. The results will display:
+# Vehicle Search History will allow the user to search by Vehicle Serial No. When inputted, 
+# press OK to obtain your results. The results will display:
 #
 # i. The number of results found
 #
