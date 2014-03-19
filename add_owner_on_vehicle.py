@@ -12,7 +12,8 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
         self.is_primary_owner = self.add(npyscreen.TitleSelectOne, 
                                             name='Primary Owner:',
                                             values=['Y', 'N'],
-                                            begin_entry_at=25)
+                                            begin_entry_at=25,
+                                         scroll_exit=True)
         # if self.parentApp.serial_no:
             # self.vehicle_id.value = self.parentApp.serial_no
          
@@ -102,6 +103,7 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
             # if user selected ok forward them to the 
             # add person form.
             if response:
+                self.parentApp.AP_default = self.owner_id.value
                 # set the next form to be the people form
                 # if the add person form exits with switchFormPrevious
                 # we should end up back here.

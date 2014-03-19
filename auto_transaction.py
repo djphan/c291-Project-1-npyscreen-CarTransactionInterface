@@ -32,21 +32,8 @@ class AddBuyer(npyscreen.ActionPopup):
             self.parentApp.AT_buyers.remove(self.buyer_id.value)
         self.buyer_id.value = '' # clear the form
         self.parentApp.switchForm("AUTOTRANSACTION")
-
-# class AddSeller(npyscreen.ActionPopup):
-#     def create(self):
-#         self.seller_id = self.add(npyscreen.TitleText, name="Seller ID:")
-
-#     def on_ok(self):
-#         self.parentApp.AT_sellers.append(self.seller_id.value)
-#         self.parentApp.switchFormPrevious()
-
-#     def on_cancel(self):
-#         self.parentApp.switchFormPrevious()
         
 class AutoTransaction(npyscreen.FormBaseNew):
-
-
     def create(self):
         self.nextrelx+=1
         self.t_id    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
@@ -85,7 +72,7 @@ class AutoTransaction(npyscreen.FormBaseNew):
         self.other_buyers.values = self.parentApp.AT_buyers
 
 
-        self.nextrelx+=35; self.nextrely+=1
+        self.nextrelx+=32; self.nextrely+=1
         self.submit_button = self.add(npyscreen.ButtonPress, name="Submit", width=8)
         self.submit_button.whenPressed = self.on_ok
         self.nextrely-=1; self.nextrelx+=10
