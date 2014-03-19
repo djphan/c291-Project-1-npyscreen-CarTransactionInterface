@@ -49,7 +49,14 @@ choice once a primary owner has been selected, or enforce that the first new own
 is the primary (Enter Primary Owner: ________ ) and then have an 'Add Secondary Owner'
 button?
 
-
+Final Tests:
+Dan P: New Vehicle Registration
+       Error raised in: Owner form when SIN ID doesn't match (prompts to add a person via People Form)
+       Error raised in: Type ID
+       Error Raised in when primary owner not set first when attempting to add to the Owner Form
+       Vehicle entry Good
+       People Entry Good
+       Owner Entry Good
 
 #---------------------------------------------------------------------------------
 # Manual - Auto Transaction Database Interface
@@ -57,11 +64,11 @@ button?
 # Table of Contents:
 # i. Login
 # ii. Database Entry Modules
-#     ii.a. New Vehicle Registration <-- Not Done but basic part is - Dan
+#     ii.a. New Vehicle Registration 
 #     ii.b.
 #     ii.c. Driver Licence Registration
 #     ii.d. Violation Record
-#     ii.e. People
+#     ii.e. People <- Not Done
 # iii. Search
 #     iii.a.
 #     iii.b. Violation Search
@@ -94,7 +101,10 @@ button?
 #
 # vi. If the owner does not exist in the database (i.e. the SIN number is not in the database)
 # an error will be displayed and the user will be prompted to add the owner information
-# to the people's database. A new window will popup for the people's form
+# to the people's database. A new window will popup for the people's form. The user can fill
+# in the form and return to the add owner form to complete it.
+#
+#
 #
 
 #---------------------------------------------------------------------------------
@@ -119,7 +129,7 @@ button?
 # Pressing enter again submits the path to the program and brings the 
 # user back to the interface to complete the licence entry.
 # 
-# iiii. The following fields are required: (1) Licence no (2) SIN
+# iv. The following fields are required: (1) Licence no (2) SIN
 # 
 
 
