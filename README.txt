@@ -104,8 +104,6 @@ Dan P: New Vehicle Registration
 # to the people's database. A new window will popup for the people's form. The user can fill
 # in the form and return to the add owner form to complete it.
 #
-#
-#
 
 #---------------------------------------------------------------------------------
 # ii.c. Driver Licence Registration
@@ -131,8 +129,6 @@ Dan P: New Vehicle Registration
 # 
 # iv. The following fields are required: (1) Licence no (2) SIN
 # 
-
-
 
 #---------------------------------------------------------------------------------
 # ii.d. Violation Record
