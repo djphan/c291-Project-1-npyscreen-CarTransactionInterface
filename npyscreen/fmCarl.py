@@ -7,11 +7,6 @@ class ActionFormCarl(fmForm.Form):
     OK_BUTTON_TEXT          = "Back"
     CANCEL_BUTTON_TEXT      = "Cancel"
 
-    def set_up_exit_condition_handlers(self):
-        super(ActionFormCarl, self).set_up_exit_condition_handlers()
-        self.how_exited_handers.update({
-            widget.EXITED_ESCAPE:   self.find_cancel_button
-        })
 
     def find_cancel_button(self):
         self.editw = len(self._widgets__)-2

@@ -1,6 +1,24 @@
 import npyscreen
+import curses
+from npyscreen import wgwidget as widget
 
-class DriverSearch(npyscreen.ActionFormCarl):
+class DriverSearch(npyscreen.FormBaseNew):
+
+    # to define a keystroke --> call a function:
+    def __init__(self, *args, **keywords):
+        super(DriverSearch, self).__init__(*args, **keywords)
+        self.add_handlers({
+            'q': self.on_ok,
+        })
+
+    # to have ESC --> go back:
+    def set_up_exit_condition_handlers(self):
+        super().set_up_exit_condition_handlers()
+        self.how_exited_handers.update({
+            widget.EXITED_ESCAPE:   self.on_ok
+        })
+
+
     def create(self):
         self.chooser = self.add(npyscreen.SelectOne, max_height=2,
                                 scroll_exit=True)
@@ -21,6 +39,8 @@ class DriverSearch(npyscreen.ActionFormCarl):
         self.results = self.add(npyscreen.Pager, name="Results:", height=16,
                                 max_height=16, scroll_exit=True,
                                 slow_scroll=True, exit_left=True, exit_right=True)
+
+
         
     def on_ok(self):
         self.parentApp.switchForm("SEARCHENGINE")        

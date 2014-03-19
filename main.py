@@ -4,7 +4,7 @@ import npyscreen
 import cx_Oracle
 import pdb
 from new_vehicle_registration import NewVehicleRegistration
-from auto_transaction import AutoTransaction, AddBuyer, AddSeller
+from auto_transaction import AutoTransaction, AddBuyer
 from driver_licence_registration import DriverLicenceRegistration
 from violation_record import ViolationRecord
 from search_engine import SearchEngine
@@ -26,8 +26,8 @@ class MyApplication(npyscreen.NPSAppManaged):
                      NewVehicleRegistration, name='New Vehicle Registration')
 
         self.auto_transaction_initialized = False
-        self.addFormClass('ADDBUYER', AddBuyer, name='Add Buyer')
-        self.addFormClass('ADDSELLER', AddSeller, name='Add Seller')
+        self.addForm('ADDBUYER', AddBuyer, name='Add Buyer')
+        # self.addFormClass('ADDSELLER', AddSeller, name='Add Seller') # not need anymore?
 
 
 
