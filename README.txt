@@ -13,10 +13,8 @@ https://eclass.srv.ualberta.ca/mod/forum/discuss.php?d=329146
 https://eclass.srv.ualberta.ca/mod/page/view.php?id=998610
 We will have to alter some things to comply with these new requirements. Nothing too major though.
 
- 	driver_search.py            <--- done
     Dan: Added some error checking to driver search, double check the work.
  	vehicle_history_search.py   <- Dan (mostly done, can you guys run tests to see if you can break this form?)
- 	violation_search.py         <--- Jon (near completion)
  	
 If you want to work on one of them please make a note here so we don't end up doing the same thing twice.
 
@@ -27,10 +25,8 @@ Other TO-DO's:
                            } will add people form where needed  
     AutoTransaction     <--} once it's ready - Carl
     
-    DriverLicence       <-- Jon will finish Monday with TA(BLOB issue)
                         < -- Dan/Carl: Double check date time error
     NewVehicleRegistration?? (at least mostly done) <-- Jon (near completion)
-    Create add_people form            <-- Jon 
 
   <add other TODO's here if you have any>
 
@@ -60,11 +56,11 @@ button?
 # ii. Database Entry Modules
 #     ii.a. New Vehicle Registration <-- Not Done but basic part is - Dan
 #     ii.b.
-#     ii.c. 
+#     ii.c. Driver Licence Registration
 #     ii.d. Violation Record
 # iii. Search
 #     iii.a.
-#     iii.b.
+#     iii.b. Violation Search
 #     iii.c. Vehicle Search History
 # iv. General Information with regards to the interface
 #---------------------------------------------------------------------------------
@@ -79,7 +75,40 @@ button?
 # i. When adding to the new vehicle registration form, we will require the Serial No
 # and the Type ID of the vehichle. If left blank, user will return an error indicating
 # so.
+# 
+# 
+# 
 #
+#
+#
+#
+#
+
+#---------------------------------------------------------------------------------
+# ii.c. Driver Licence Registration
+#---------------------------------------------------------------------------------
+# Driver Licence Registration allows the user to enter requisite data for entering
+# a new licence into the drive_licence table. 
+# 
+# i. This form allows the user to register a person
+# who does not currently possess a licence into the drive_licence table.
+# 
+# ii. If the user specifies a SIN that does not appear in the people table
+# they are warned and given the option to add the person to the people table.
+# They can also do this directly by hitting the add person button. After 
+# the entry is complete they are forwarded back to the licence registration
+# form to complete licence information and submit the form.
+#
+# iii. If the user chooses they may add a photo to the the entry. To do so the user 
+# should navigate to the Photo field and hit enter. The user is presented with their 
+# local file system and can navigate to the appropriate file. If the user wishes to
+# specify a filepath directly they should hit tab once. 
+# Pressing enter again submits the path to the program and brings the 
+# user back to the interface to complete the licence entry.
+# 
+# iiii. The following fields are required: (1) Licence no (2) SIN
+# 
+
 
 
 #---------------------------------------------------------------------------------
@@ -104,6 +133,22 @@ button?
 #
 # Both SIN numbers, Vehicle Serial No, and Violation type must match pre-entered 
 # data in the database. 
+
+#---------------------------------------------------------------------------------
+# iii.b. Violation Search
+#---------------------------------------------------------------------------------
+# Violation search allows the user to specify a SIN or licence number. Based on the
+# provided value a list of all tickets from the ticket table is returned.
+# Each ticket also has its fine amount which is pulled from the ticket_type table.
+# The results will display:
+#
+# i. The number of results found
+#
+# ii. And an output listing: (1) The unique ticket number, 
+# (2) the violator number/sin, (3) the vehicle id, (4) the officer id who issued the ticket
+# (5) the violation type (6) the violation date (7) the place (8) the description
+# (9) and the fine amount
+
 
 
 #---------------------------------------------------------------------------------

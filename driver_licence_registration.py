@@ -26,6 +26,13 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
                                             allowClear=True,
                                             begin_entry_at=20)
 
+        self.button1 = self.add(npyscreen.ButtonPress, name = "Add person")
+        self.button1.whenPressed = self.button_press_add_person
+        self.owner = self.add(npyscreen.MultiLineEdit, name=':')
+
+    def button_press_add_person(self):
+        self.parentApp.switchForm("ADDPERSON")
+
         # # get a unique licence id number and auto display?
         # # more issues because field is varchar
         # query = "SELECT MAX(licence_no) FROM drive_licence"
@@ -106,6 +113,35 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         return True
 
     def on_ok(self):
+        # deal with sin entered not being in db
+        # if not we need to prompt the user to enter the person
+        # into the people db. We will open this form as a popup.
+        query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
+        if self.parentApp.db.query({'sin':self.sin.value.\
+            ljust(15, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
+                title="Error", form_color='STANDOUT', 
+                wrap=True, wide=False, editw=1)
+            
+            # prompt to add a new person.
+            response = npyscreen.notify_ok_cancel(\
+                "Enter a person with this SIN into the database?", 
+                title="Error", form_color='STANDOUT', 
+                wrap=True, editw=1)
+
+            # if user selected ok forward them to the 
+            # add person form.
+            if response:
+                # set the next form to be the people form
+                # if the add person form exits with switchFormPrevious
+                # we should end up back here.
+                self.parentApp.setNextForm('ADDPERSON')
+            else:
+                return
+            
+            return False
+
+        # validate the form.
         if not self.validate_forms():
             self.editing = True
             return
