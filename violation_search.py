@@ -17,7 +17,8 @@ class ViolationSearch(npyscreen.ActionFormCarl):
                                    begin_entry_at=15, use_two_lines=False, 
                                    field_width=54)
         self.nextrely-=1   
-        self.query_confirm = self.add(npyscreen.ButtonPress, name="OK", relx=70)
+        self.query_confirm = self.add(npyscreen.ButtonPress, name="OK", relx=70,
+                                    scroll_exit = True)
         self.query_confirm.whenPressed = self.process_query
 
         self.results = self.add(npyscreen.Pager, name="Results:", height=16,
