@@ -6,6 +6,9 @@ CMPUT 291 Project 1 (Python 3)
 __________________________
 COMMUNICATION / NOTES     |
 __________________________|
+Case: Check empty database set (for the min/max queries).
+
+
 Dan: The due date got pushed back to Friday 6:00 PM (in case things come up) but lets finish early.
 https://eclass.srv.ualberta.ca/mod/forum/discuss.php?d=329146
 
