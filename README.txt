@@ -8,6 +8,9 @@ COMMUNICATION / NOTES     |
 __________________________|
 Case: Check empty database set (for the min/max queries).
 
+Carl: According to the forums the readability of our source code will be evaluated as well, 
+including stuff like docstrings and comments. I'm going to start going through all our modules and
+removing notes we don't need anymore and commenting/docstringing the non-trivial sections.
 
 Dan: The due date got pushed back to Friday 6:00 PM (in case things come up) but lets finish early.
 https://eclass.srv.ualberta.ca/mod/forum/discuss.php?d=329146
