@@ -51,12 +51,18 @@ button?
 
 Final Tests:
 Dan P: New Vehicle Registration
+       20 03 14 New tests:
+            Primary owner needed
+            Vehicle Serial No Auto fills.
+            Update manual.
+            Previous errors tested
+
        Error raised in: Owner form when SIN ID doesn't match (prompts to add a person via People Form)
        Error raised in: Type ID
        Error Raised in when primary owner not set first when attempting to add to the Owner Form
        Vehicle entry Good
-       People Entry Good
-       Owner Entry Good
+       People entry Good
+       Owner entry Good
 
 #---------------------------------------------------------------------------------
 # Manual - Auto Transaction Database Interface
@@ -93,13 +99,13 @@ Dan P: New Vehicle Registration
 # with the add owner button. The add owner button will then allow the user to
 # input the new owner's SIN, vehichle serial no, and primary owner status
 #
-# iv. The first owner MUST be the primary owner. If the user inputs a secondary
-# owner first, an error will prompt the user to enter the primary owner first.
+# iv. The user can input the owners in any order, however he must have a primary
+# owner before the information is entered into the database. An error prompt
+# will raise if the user does not complete this action.
 #
-# v. The user can continue to add any number of secondary owners after adding the first
-# primary owner. 
+# The owner form will auto fill the vehicle serial no for each entry for ease.
 #
-# vi. If the owner does not exist in the database (i.e. the SIN number is not in the database)
+# v. If the owner does not exist in the database (i.e. the SIN number is not in the database)
 # an error will be displayed and the user will be prompted to add the owner information
 # to the people's database. A new window will popup for the people's form. The user can fill
 # in the form and return to the add owner form to complete it.
