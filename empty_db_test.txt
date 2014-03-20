@@ -9,3 +9,11 @@ Scenario 1. No issues found.
 Scenario 2: Registering officer: auto transaction.
 1)
 Sellers are not being removed from db on transactions.
+
+
+
+
+Scenario 3: Driver Registering Officer: Driver Licence Reg
+1)
+When registering a new drivers licence you are taken back
+to the main menu. Not sure if this is ok. Nitpicking.
