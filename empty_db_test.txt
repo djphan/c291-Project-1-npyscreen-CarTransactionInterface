@@ -12,7 +12,8 @@ Sellers are not being removed from db on transactions.
 
 <Carl>: Same for me... I can't figure out why that's happening though.
         The code to do so is in there. :/
-
+<Jon>: :( I will start looking into all the errors once I'm done a once through
+        of the tests. 
 
 
 Scenario 3: Driver Registering Officer: Driver Licence Reg
@@ -32,3 +33,8 @@ Scenario 4: Police Officer: Violation Record
 
 <Carl>: One of you changed the MAX statement in auto_transaction... 
         Probably this is the same bug here?
+<Jon>: I changed it, will do the same here once im done testing.
+
+
+Scenarion 5: searches
+*** I have no back in driver search.
