@@ -22,7 +22,7 @@ class MyApplication(npyscreen.NPSAppManaged):
         self.addFormClass('MAIN', MainMenu, name="MAIN MENU")
         self.addFormClass('MAIN_POPUP',
                      MainMenuPopup, name="Connect to Oracle")
-        self.addFormClass('NEWVEHICLEREGISTRATION',
+        self.addForm('NEWVEHICLEREGISTRATION',
                      NewVehicleRegistration, name='New Vehicle Registration')
 
         self.auto_transaction_initialized = False
@@ -39,7 +39,9 @@ class MyApplication(npyscreen.NPSAppManaged):
                      SearchEngine, name='Search Engine')
         self.addFormClass('DRIVER_SEARCH',
                      DriverSearch, name='Driver Search')
-        self.addForm('ADDOWNERONVEHICLE',
+        self.AOOV_default = ''
+
+        self.addFormClass('ADDOWNERONVEHICLE',
                      AddOwnerOnVehicle, name='Add owner')
         self.addFormClass('VIOLATION_SEARCH',
                      ViolationSearch, name='Violation Search')
@@ -49,6 +51,8 @@ class MyApplication(npyscreen.NPSAppManaged):
         # new additions for add people popup form
         self.addFormClass('ADDPERSON', AddPerson, name='Add Person', minimum_lines=24, minimum_columns=80, lines=16, columns=60)
         self.AP_default = None
+        self.AP_goto_NVR = False
+
 
 class MainMenuPopup(npyscreen.ActionPopup):
     def create(self):
@@ -104,6 +108,7 @@ class MainMenu(npyscreen.FormBaseNew):
         def buttonpress6(*args):
             self.parentApp.setNextForm(None)
             self.editing = False
+            raise SystemExit
 
         self.button0 = self.add(npyscreen.ButtonPress, name="Oracle Login")
         self.button0.whenPressed = buttonpress0
@@ -123,10 +128,14 @@ class MainMenu(npyscreen.FormBaseNew):
         self.button6.whenPressed = buttonpress6
 
 if __name__ == "__main__":
-    while True:
-        try:
-            app = MyApplication()
-            app.run()
-        except:
-            pass
+    app = MyApplication()
+    app.run()
+    # while True:
+    #     try:
+    #         app = MyApplication()
+    #         app.run()
+    #     except KeyboardInterrupt:
+    #         raise SystemExit
+    #     except:
+    #         pass
     print('done')

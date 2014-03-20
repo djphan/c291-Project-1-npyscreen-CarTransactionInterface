@@ -132,12 +132,21 @@ class AddPerson(npyscreen.ActionPopup):
                 wrap=True, wide=False, editw=1)
             return
 
-        npyscreen.notify_confirm("Success!", title="Status", 
+        npyscreen.notify_confirm("%s successfully added to database!"%self.sin.value, title="Status", 
             form_color='STANDOUT', wrap=True,
             wide=False, editw=1)
         
+        # If we got here via add_owner, skip add_owner and go directly back to
+        # NVR.
+        if self.parentApp.AP_goto_NVR:
+            self.parentApp.AP_goto_NVR = False # reset it
+            self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
         # teleport us to the form from which we came!
         self.parentApp.switchFormPrevious() 
 
     def on_cancel(self):
+        # if self.parentApp.AP_goto_NVR:
+        #     self.parentApp.AP_goto_NVR = False # reset it
+        #     self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
+
         self.parentApp.switchFormPrevious()

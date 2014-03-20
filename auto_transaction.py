@@ -209,7 +209,6 @@ class AutoTransaction(npyscreen.FormBaseNew):
     def on_cancel(self):
         self.parentApp.AT_buyers = list()
         self.other_buyers.values = self.parentApp.AT_buyers
-        self.parentApp.AT_sellers = list()
         self.vehicle.value = ''
         self.date.value = ''
         self.price.value = ''
