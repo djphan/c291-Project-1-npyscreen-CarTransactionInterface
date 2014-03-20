@@ -1,5 +1,4 @@
 import npyscreen
-import pdb
 
 class ViolationSearch(npyscreen.ActionFormCarl):
     def create(self):
@@ -48,7 +47,6 @@ class ViolationSearch(npyscreen.ActionFormCarl):
                 WHERE tt.vtype (+)= t.vtype
                       AND UPPER(t.violator_no) = UPPER(:violator_no)
             """
-            # pdb.set_trace()
             results = self.parentApp.db.query({"violator_no":self.user_query.
                 value.ljust(15, ' ')}, query)
         

@@ -2,7 +2,6 @@ import npyscreen
 import cx_Oracle
 import datetime
 import os
-import pdb
 
 class AddPerson(npyscreen.ActionPopup):
     def create(self):

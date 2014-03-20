@@ -32,14 +32,12 @@ class VehicleHistorySearch(npyscreen.ActionFormCarl):
         # build query for when user picks "Search by vehicle serial no"
         query = """ 
             SELECT  h.serial_no AS Serial_No, count(DISTINCT transaction_id) AS Number_of_Sales, avg(price) AS Average_Price, count(DISTINCT t.ticket_no) AS Number_of_Tickets 
-            FROM   	vehicle h, auto_sale a, ticket t
+            FROM    vehicle h, auto_sale a, ticket t
             WHERE   t.vehicle_id (+)= h.serial_no AND
                     a.vehicle_id (+)= h.serial_no AND
                     UPPER(:serial_no) = UPPER(h.serial_no)
             GROUP BY h.serial_no
           """
-        # Check Upper Statement
-        # pdb.set_trace()
         results = self.parentApp.db.query({"serial_no":self.user_query.value.ljust(15, ' ')}, query)
 
         # If we get an empty list as a query result notify the user
