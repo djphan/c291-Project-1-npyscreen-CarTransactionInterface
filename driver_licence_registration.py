@@ -1,7 +1,7 @@
 import npyscreen
 import datetime
 import cx_Oracle
-import os 
+import os
 
 class DriverLicenceRegistration(npyscreen.ActionForm):
     """
@@ -14,7 +14,7 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
       Photo
       Issuing Date
       Expiring Date
-    
+
     Also links explicitly to the Add Person form via the "Add new person"
     button.
     """
@@ -31,11 +31,11 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         self.photo = self.add(npyscreen.TitleFilenameCombo, name='Photo:',
                               begin_entry_at=20)
 
-        self.issuing_date = self.add(npyscreen.TitleDateCombo, 
+        self.issuing_date = self.add(npyscreen.TitleDateCombo,
                                      name='Issuing Date:', allowClear=True,
                                      begin_entry_at=20)
 
-        self.expiring_date = self.add(npyscreen.TitleDateCombo, 
+        self.expiring_date = self.add(npyscreen.TitleDateCombo,
                                       name='Expiring Date:', allowClear=True,
                                       begin_entry_at=20)
 
@@ -43,59 +43,62 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         self.button1 = self.add(npyscreen.ButtonPress, name="Add new person")
         self.button1.whenPressed = self.button_press_add_person
         self.nextrelx+=2
-        
+
     def button_press_add_person(self):
         self.parentApp.switchForm("ADDPERSON")
 
     def validate_forms(self):
-        query = "SELECT COUNT(licence_no) FROM drive_licence WHERE licence_no = :lic"
-        if self.parentApp.db.query({'lic':self.licence_no.value.ljust(15, ' ')}, 
+        query = """SELECT COUNT(licence_no) FROM drive_licence WHERE
+                   licence_no = :lic"""
+        if self.parentApp.db.query({'lic':self.licence_no.value.ljust(15, ' ')},
             query)[0][0] != 0:
-            npyscreen.notify_confirm("Licence number already in use. Choose another.", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            npyscreen.notify_confirm(
+                "Licence number already in use. Choose another.", title="Error",
+                form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # ensure sin is not left blank
+        # Ensure sin is not left blank
         if self.sin.value == '':
-            npyscreen.notify_confirm("Please enter a SIN", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            npyscreen.notify_confirm(
+                "Please enter a SIN", title="Error", form_color='STANDOUT',
+                wrap=True, wide=False, editw=1)
             return False
 
-        # ensure sin exists in people table
+        # Ensure sin exists in people table
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] == 0:
-            npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+        if self.parentApp.db.query(
+            {'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] == 0:
+            npyscreen.notify_confirm(
+                "Invalid SIN. Person does not exist", title="Error",
+                form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
-        # ensure sin is not already in the drive_licence table
+        # Ensure sin is not already in the drive_licence table
         query = "SELECT COUNT(sin) FROM drive_licence WHERE sin = :sin"
-        if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] != 0:
-            npyscreen.notify_confirm("Person with sin: " + self.sin.value + 
-            " is already licenced", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+        if self.parentApp.db.query(
+            {'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] != 0:
+            npyscreen.notify_confirm(
+                "Person with sin: " + self.sin.value + " is already licenced",
+                title="Error", form_color='STANDOUT', wrap=True, wide=False,
+                editw=1)
             return False
 
-        # # ensure class is not empty
-        # if self.licence_class.value == '':
-        #     npyscreen.notify_confirm("Please enter a licence class", 
-        #     title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
-        #     return False
-
-        # ensure file path for image is valid
+        # Ensure file path for image is valid
         if self.photo.value:
             if not os.path.isfile(self.photo.value):
-                npyscreen.notify_confirm("You must select a valid image path", 
-                                        title="Bad image path",
-                                        form_color='STANDOUT', wrap=True,
-                                        wide=False, editw=1)
-                return False 
+                npyscreen.notify_confirm(
+                    "You must select a valid image path",
+                    title="Bad image path", form_color='STANDOUT', wrap=True,
+                    wide=False, editw=1)
+                return False
 
-        # make sure we don't try to date format an empty string.
+        # Make sure we don't try to date format an empty string.
         if self.issuing_date.value:
-            self.issuing_date.value = self.issuing_date.value.strftime("%d-%b-%y")
+            self.issuing_date.value = \
+                self.issuing_date.value.strftime("%d-%b-%y")
         if self.expiring_date.value:
-            self.expiring_date.value = self.expiring_date.value.strftime("%d-%b-%y")
+            self.expiring_date.value = \
+                self.expiring_date.value.strftime("%d-%b-%y")
 
         return True
 
@@ -108,10 +111,10 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         if self.parentApp.db.query(
             {'sin':self.sin.value.ljust(15, ' ')}, query)[0][0] == 0:
             # prompt to add a new person.
-            response = npyscreen.notify_ok_cancel(\
+            response = npyscreen.notify_ok_cancel(
                 "This person does not exist.\n"
-                "Enter a person with this SIN into the database?", 
-                title="Alert", form_color='STANDOUT', 
+                "Enter a person with this SIN into the database?",
+                title="Alert", form_color='STANDOUT',
                 wrap=True, editw=1)
 
             # If user selected ok forward them to the add person form.
@@ -144,21 +147,16 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
             image = image_file.read()
         self.parentApp.db.cursor.setinputsizes(photo=cx_Oracle.BLOB)
         if self.photo.value:
-            image_file.close() 
+            image_file.close()
         else: # Should be null value.
             image = ''
 
         # prep and send db statement
-        insert = """insert into drive_licence (licence_no, 
-                                            sin, class, photo,
-                                            issuing_date,
-                                            expiring_date)
-                                            values (:licence_no, :sin,
-                                            :class, :photo,
-                                            :issuing_date,
-                                            :expiring_date)"""
+        insert = """INSERT INTO drive_licence (licence_no, sin, class, photo,
+                    issuing_date, expiring_date) VALUES (:licence_no, :sin,
+                    :class, :photo, :issuing_date, :expiring_date)"""
 
-        entry_dict = {'licence_no':str(self.licence_no.value), 
+        entry_dict = {'licence_no':str(self.licence_no.value),
                       'sin':str(self.sin.value),
                       'class':str(self.licence_class.value),
                       'photo':image,
@@ -169,13 +167,13 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         if error:
             self.editing = True # don't return to main menu
             # print error to screen
-            npyscreen.notify_confirm(str(error), title="Status", 
+            npyscreen.notify_confirm(str(error), title="Status",
                                      form_color='STANDOUT', wrap=True,
                                      wide=False, editw=1)
             return
 
         # If we get here we have a successful entry. Notify the user.
-        npyscreen.notify_confirm("Success!", title="Status", 
+        npyscreen.notify_confirm("Success!", title="Status",
                                  form_color='STANDOUT', wrap=True,
                                  wide=False, editw=1)
 
@@ -187,7 +185,7 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         self.issuing_date.value = ''
         self.expiring_date.value = ''
         self.parentApp.switchFormPrevious() # exit
-                                                
+
     def on_cancel(self):
         # Just clear the form and exit back to main menu.
         self.licence_no.value = ''
