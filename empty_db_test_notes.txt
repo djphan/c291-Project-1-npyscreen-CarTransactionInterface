@@ -1,0 +1,41 @@
+####Notes from testing empty db
+1. Test scenario 1 where a transaction occurs between buyer and seller is not
+removing the seller from the owner table.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Not Important
+
+1. New vehicle reg:
+When trying to enter a vehicle no vehicle types exists in the 
+db. Since it's a foreign key you can't make an entry. assuming
+TA wil prepulate the data.
+
+
