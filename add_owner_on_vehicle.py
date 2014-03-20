@@ -181,7 +181,7 @@ class AddOwnerOnVehicle(npyscreen.ActionPopup):
             self.parentApp.NVR_primary_owner[0] = self.owner_id.value
         elif self.is_primary_owner.value[0] == 1: # 'N' selected
             if self.owner_id.value not in self.parentApp.NVR_other_owners and\
-               self.owner_id.value != self.parentApp.NVR_primary_owner[0] and\
+               self.owner_id.value != self.parentApp.NVR_primary_owner[0]:
                 self.parentApp.NVR_other_owners.append(self.owner_id.value)
 
 
