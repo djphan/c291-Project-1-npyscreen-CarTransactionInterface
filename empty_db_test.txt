@@ -10,6 +10,8 @@ Scenario 2: Registering officer: auto transaction.
 1)
 Sellers are not being removed from db on transactions.
 
+<Carl>: Same for me... I can't figure out why that's happening though.
+        The code to do so is in there. :/
 
 
 
@@ -20,8 +22,13 @@ to the main menu. Not sure if this is ok. Nitpicking but
 each scenario specifies explicitly when it should go back 
 to the main menu so may be worth changing.
 
+<Carl>: Yes I agree that should be changed.
+
 Everything else here seems good.
 
 
 Scenario 4: Police Officer: Violation Record
 1) violation record crashes on entry with empty tables.
+
+<Carl>: One of you changed the MAX statement in auto_transaction... 
+        Probably this is the same bug here?
