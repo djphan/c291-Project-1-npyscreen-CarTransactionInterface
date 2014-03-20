@@ -83,7 +83,13 @@ class AutoTransaction(npyscreen.FormBaseNew):
         # get maximum current transaction_id
         query = "SELECT MAX(transaction_id) FROM auto_sale"
         # set t_id to one greater
-        self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
+        # if max returns none due to an unpopulated database
+        # catch the exception that occurs on the addition
+        # and explicitly set the first t_id to a 1.
+        try:
+            self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
+        except TypeError:
+            self.t_id.value = 1
 
     def validate_forms(self):
         # is there a vehicle entered?
@@ -195,9 +201,14 @@ class AutoTransaction(npyscreen.FormBaseNew):
 
         # get maximum current transaction_id
         query = "SELECT MAX(transaction_id) FROM auto_sale"
-        # set t_id to one greater
-        self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
-
+        # increment t_id based on largest t_id in db
+        # if there are no t_id's in the db catch the conversion
+        # error that occurs when trying to increment a none
+        # type and set the first t_id to 1
+        try:
+            self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
+        except TypeError:
+            self.t_id.value = 1
         self.parentApp.AT_buyers = list()
         self.other_buyers.values = self.parentApp.AT_buyers
         self.vehicle.value = ''
