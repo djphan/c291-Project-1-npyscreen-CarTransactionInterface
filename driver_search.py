@@ -4,13 +4,6 @@ from npyscreen import wgwidget as widget
 
 class DriverSearch(npyscreen.FormBaseNew):
 
-    # to define a keystroke --> call a function:
-    def __init__(self, *args, **keywords):
-        super(DriverSearch, self).__init__(*args, **keywords)
-        self.add_handlers({
-            'q': self.on_ok,
-        })
-
     # to have ESC --> go back:
     def set_up_exit_condition_handlers(self):
         super().set_up_exit_condition_handlers()
