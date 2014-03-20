@@ -81,7 +81,7 @@ class NewVehicleRegistration(npyscreen.ActionForm):
             return False
 
         if not self.type_id.value == '':
-            query = "SELECT count(type_id) FROM vehicle where type_id = :type_id"
+            query = "SELECT count(type_id) FROM vehicle_type where type_id = :type_id"
             if self.parentApp.db.query({'type_id' : int(self.type_id.value)}, query)[0][0] == 0:
                 npyscreen.notify_confirm("Vehicle Type ID %s does not exist in database."%self.type_id.value, title="Type ID Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
