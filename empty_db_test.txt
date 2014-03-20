@@ -23,6 +23,7 @@ to the main menu. Not sure if this is ok. Nitpicking but
 each scenario specifies explicitly when it should go back 
 to the main menu so may be worth changing.
 
+When you add a new person sin does not autopopulate. 
 <Carl>: Yes I agree that should be changed.
 
 Everything else here seems good.
@@ -37,4 +38,4 @@ Scenario 4: Police Officer: Violation Record
 
 
 Scenarion 5: searches
-*** I have no back in driver search.
+*** I have no back in driver search. Tab/arrow controls are wonky.
