@@ -16,4 +16,12 @@ Sellers are not being removed from db on transactions.
 Scenario 3: Driver Registering Officer: Driver Licence Reg
 1)
 When registering a new drivers licence you are taken back
-to the main menu. Not sure if this is ok. Nitpicking.
+to the main menu. Not sure if this is ok. Nitpicking but 
+each scenario specifies explicitly when it should go back 
+to the main menu so may be worth changing.
+
+Everything else here seems good.
+
+
+Scenario 4: Police Officer: Violation Record
+1) violation record crashes on entry with empty tables.
