@@ -39,3 +39,9 @@ Scenario 4: Police Officer: Violation Record
 
 Scenarion 5: searches
 *** I have no back in driver search. Tab/arrow controls are wonky.
+
+1) Found a weird issue on on driver search, I have 3 people licenced in total
+2 are named Jon, 1 is named Jim, when I search by the name Jon, I am getting 3
+results instead of 2. The licence number of the first 2 results are paired 
+accurately with the appropriate name but in the 3rd result that should not be 
+there no licence number is present, I get N/A.
