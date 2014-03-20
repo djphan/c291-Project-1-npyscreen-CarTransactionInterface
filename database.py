@@ -2,6 +2,14 @@ import cx_Oracle
 import npyscreen
 
 class Database:
+    """
+    Holds a cx_Oracle database connection and cursor. Defines a standard insert
+    method and query method to be used by all forms on MyApplication.
+
+    Instances of this class are intended to be assigned to MyApplication.db,
+    such that any form may access its methods by calling on self.parentApp.db.
+    """
+
     def __init__(self, connect_str=None):
         if connect_str is None:
             self.logged_in = False
@@ -38,12 +46,10 @@ class Database:
         except cx_Oracle.DatabaseError as exc:
             # return error arguments if an error occurs, else return None
             error = exc.args[0]
-            # npyscreen.notify_confirm(str(values_dict)+'\n'+str(prepare_statement), title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return error
-        # if TitleTextno error, then return the database results
         rv = self.cursor.fetchall()
         return rv
 
-    # delete currently does the same as insert, so this ensures that changes to
-    # insert affect delete as well
+    # The delete method currently does the same as insert, so this ensures that
+    # changes to insert affect delete as well
     delete = insert
