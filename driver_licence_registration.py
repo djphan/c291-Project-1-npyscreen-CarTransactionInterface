@@ -19,6 +19,7 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
     button.
     """
     def create(self):
+        self.nextrelx += 1
         self.licence_no = self.add(npyscreen.TitleText, name='Licence no:',
                                    begin_entry_at=20)
         self.nextrely += 1
