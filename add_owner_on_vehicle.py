@@ -5,14 +5,14 @@ import os
 class AddOwnerOnVehicle(npyscreen.ActionPopup):
     def create(self):
         self.vehicle_id = self.add(npyscreen.TitleText, name='Vehicle ID:', 
-                                            begin_entry_at=25, editable=False)
+                                   begin_entry_at=25, editable=False,
+                                   color="STANDOUT")
 
         # If serial_no was filled in on the NVR form, then use that same serial number.
         # (otherwise it's easy to forget the value used on the form, and entering a
         # different value defeats the purpose of this popup).
         if self.parentApp.AOOV_default:
             self.vehicle_id.value = self.parentApp.AOOV_default
-            self.vehicle_id.color = "STANDOUT"
         self.parentApp.AOOV_default = ''
 
 
