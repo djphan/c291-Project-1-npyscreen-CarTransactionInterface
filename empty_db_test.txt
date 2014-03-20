@@ -1,3 +1,11 @@
-2.
+Scenario 1. No issues found.
+
+
+
+
+
+
+
+Scenario 2: Registering officer: auto transaction.
 1)
 Sellers are not being removed from db on transactions.
