@@ -2,6 +2,22 @@ import npyscreen
 from npyscreen import wgwidget as widget
 
 class DriverSearch(npyscreen.FormBaseNew):
+    """
+    Form to search the database for a driver, by name or by license number.
+
+    Required input:
+      Search type selection
+      Search query
+
+    Returns:
+      Name
+      Licence No
+      Address
+      Birthday
+      Licence Class
+      Conditions
+      Expiring Date
+    """
     # to have ESC --> go back:
     def set_up_exit_condition_handlers(self):
         super().set_up_exit_condition_handlers()

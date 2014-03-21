@@ -1,6 +1,23 @@
 import npyscreen
 
 class NewVehicleRegistration(npyscreen.ActionForm):
+    """
+    This form allows a user to register a new vehicle to the database, and add
+    both primary and other owners to it.
+
+    Required input:
+      Serial No:
+      Type ID: (note this must match a type ID defined in the database)
+      Primary owner
+
+    Optional input:
+      Maker
+      Model
+      Year
+      Color
+      Other owner(s)
+    """
+
     def create(self):
         # Setup all fields to hold user input, label data, and buttons
         self.nextrelx+=1

@@ -1,6 +1,14 @@
 import npyscreen
 
 class SearchEngine(npyscreen.FormBaseNew):
+    """
+    Selection menu for search engines.
+
+    Provides links to three search engines:
+      Driver Search
+      Violation Search
+      Vehicle History Search
+    """
     def create(self):
         self.button0 = self.add(npyscreen.ButtonPress, name="Driver Search")
         self.button0.whenPressed = \

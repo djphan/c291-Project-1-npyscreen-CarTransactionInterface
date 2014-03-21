@@ -4,14 +4,30 @@ import datetime
 import os
 
 class AddPerson(npyscreen.ActionPopup):
+    """
+    This popup form can be activated by multiple other forms, whenever they
+    detect an entered SIN that is not in the database.
+
+    Required Input:
+      SIN
+      Gender (M/F)
+
+    Optional Input:
+      Name
+      Height
+      Weight
+      Eye Color
+      Hair Color
+      Address
+      Birthday
+      
+    All the values are checked for validity before being submitted to the
+    database. Upon completion, the user is transported back to the form they
+    were working on before.
+    """
     def create(self):
         self.sin = self.add(npyscreen.TitleText, name='SIN')
 
-        # (Carl) - Added ability for AddPerson to take a default SIN:
-        #   For example, this form is accessed by Auto Transaction when the user
-        #   enters a buyer not in the database. Auto Transaction will pass this
-        #   new SIN to parentApp.AP_default for use here. If no value is passed,
-        #   then self.sin will still be editable.
         if self.parentApp.AP_default is not None:
             self.sin.value = self.parentApp.AP_default
             self.parentApp.AP_default = None
@@ -33,15 +49,19 @@ class AddPerson(npyscreen.ActionPopup):
         # ensure sin is not left blank
         if self.sin.value == '':
             npyscreen.notify_confirm("Invalid SIN. Person does not exist", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                                     title="Error",
+                                     form_color='STANDOUT',
+                                     wrap=True, wide=False, editw=1)
             return False
 
         # ensure sin is not already in the people table
         query = "SELECT COUNT(sin) FROM people WHERE sin = :sin"
         if self.parentApp.db.query({'sin':self.sin.value.ljust(15, ' ')}, 
             query)[0][0] != 0:
-            npyscreen.notify_confirm("A person already exists with the given SIN.", 
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            npyscreen.notify_confirm(
+                "A person already exists with the given SIN.", 
+                title="Error", form_color='STANDOUT', wrap=True, wide=False,
+                editw=1)
             return False
 
         # check that the name can be cast to a string
@@ -52,8 +72,10 @@ class AddPerson(npyscreen.ActionPopup):
                     40 chars.", title="Error", form_color='STANDOUT', 
                     wrap=True, wide=False, editw=1)
             except exception as error:
-                npyscreen.notify_confirm("A person already exists with the given SIN.", 
-                title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+                npyscreen.notify_confirm(
+                    "A person already exists with the given SIN.", 
+                    title="Error", form_color='STANDOUT', wrap=True, wide=False,
+                    editw=1)
                 return False
 
         # if user entered a height ensure we van convert to float.
@@ -65,7 +87,8 @@ class AddPerson(npyscreen.ActionPopup):
                 # if we get an error notify
                 float(self.height.value)
             except ValueError:
-                npyscreen.notify_confirm("Height must be a number.", title="Error", 
+                npyscreen.notify_confirm(
+                    "Height must be a number.", title="Error", 
                     form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
       
@@ -78,7 +101,8 @@ class AddPerson(npyscreen.ActionPopup):
                 # if we get an error notify
                 float(self.weight.value)
             except ValueError:
-                npyscreen.notify_confirm("Weight must be a number.", title="Error", 
+                npyscreen.notify_confirm(
+                    "Weight must be a number.", title="Error", 
                     form_color='STANDOUT', wrap=True, wide=False, editw=1)
                 return False
         
@@ -90,8 +114,9 @@ class AddPerson(npyscreen.ActionPopup):
             self.gender_choice = self.gender.get_selected_objects()[0].lower()
         else:
             # if no value is given, show an error.
-            npyscreen.notify_confirm("You must indicate gender.",
-            title="Error", form_color='STANDOUT', wrap=True, wide=False, editw=1)
+            npyscreen.notify_confirm(
+                "You must indicate gender.", title="Error",
+                form_color='STANDOUT', wrap=True, wide=False, editw=1)
             return False
 
         # if everything checks out return true.
@@ -104,23 +129,20 @@ class AddPerson(npyscreen.ActionPopup):
 
         # format and send data to db
         entry_dict = {"sin"       :str(self.sin.value),
-                  "name"          :str(self.name.value),
-                  "height"        :self.height.value,
-                  "weight"        :self.weight.value,
-                  "eyecolor"      :str(self.eye_color.value),
-                  "haircolor"     :str(self.hair_color.value),
-                  "addr"          :str(self.addr.value),
-                  "gender"        :self.gender_choice,
-                  "birthday"      :self.birthday.value.strftime("%d-%b-%y") # formatted for oracle
+                      "name"          :str(self.name.value),
+                      "height"        :self.height.value,
+                      "weight"        :self.weight.value,
+                      "eyecolor"      :str(self.eye_color.value),
+                      "haircolor"     :str(self.hair_color.value),
+                      "addr"          :str(self.addr.value),
+                      "gender"        :self.gender_choice,
+                      "birthday"      :self.birthday.value.strftime("%d-%b-%y")
                       }
-                   
 
         insert = """
-            INSERT INTO people (sin, name, height, weight, eyecolor, haircolor, addr,
-            gender, birthday) values (:sin, :name, :height, :weight, :eyecolor,
-            :haircolor, :addr, :gender, :birthday)
-            """
-
+            INSERT INTO people (sin, name, height, weight, eyecolor, haircolor,
+            addr, gender, birthday) values (:sin, :name, :height, :weight,
+            :eyecolor, :haircolor, :addr, :gender, :birthday)"""
 
         error = self.parentApp.db.insert(entry_dict, insert)
         if error:
@@ -131,9 +153,10 @@ class AddPerson(npyscreen.ActionPopup):
                 wrap=True, wide=False, editw=1)
             return
 
-        npyscreen.notify_confirm("%s successfully added to database!"%self.sin.value, title="Status", 
-            form_color='STANDOUT', wrap=True,
-            wide=False, editw=1)
+        npyscreen.notify_confirm(
+            "%s successfully added to database!"%self.sin.value,
+            title="Status", form_color='STANDOUT', wrap=True, wide=False,
+            editw=1)
         
         # If we got here via add_owner, skip add_owner and go directly back to
         # NVR.
@@ -144,8 +167,4 @@ class AddPerson(npyscreen.ActionPopup):
         self.parentApp.switchFormPrevious() 
 
     def on_cancel(self):
-        # if self.parentApp.AP_goto_NVR:
-        #     self.parentApp.AP_goto_NVR = False # reset it
-        #     self.parentApp.switchForm("NEWVEHICLEREGISTRATION")
-
         self.parentApp.switchFormPrevious()

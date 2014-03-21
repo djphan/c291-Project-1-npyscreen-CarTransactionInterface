@@ -2,7 +2,24 @@ import npyscreen
 from npyscreen import wgwidget as widget
 
 class ViolationSearch(npyscreen.FormBaseNew):
+    """
+    Form to search the database for ticket information.
 
+    Required input:
+      Search type selection
+      Search query
+
+    Returns:
+      Ticket no
+      Violator no
+      Vehicle ID
+      Officer No
+      Vtype
+      Vdate
+      Place
+      Descriptions
+      Fine
+    """
     # ESC --> go back:
     def set_up_exit_condition_handlers(self):
         super().set_up_exit_condition_handlers()

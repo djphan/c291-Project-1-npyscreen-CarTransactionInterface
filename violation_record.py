@@ -2,6 +2,22 @@ import npyscreen
 import datetime
 
 class ViolationRecord(npyscreen.ActionForm):
+    """
+    Form used by an officer to record a ticket.
+
+    Required input:
+      Violator SIN  OR  Vehicle Serial No
+      Officer ID
+      Violation Type
+
+    Optional input:
+      Date (defaults to current system date if left unset)
+      Place
+      Description
+      
+    The ticket ID is a unique identifier generated dynamically by the system
+    when the form is visited.
+    """
     def create(self):
         self.t_id = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                              name="Ticket ID:", begin_entry_at=20,

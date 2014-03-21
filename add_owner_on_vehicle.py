@@ -3,6 +3,20 @@ import cx_Oracle
 import os
 
 class AddOwnerOnVehicle(npyscreen.ActionPopup):
+    """
+    Popup for adding an owner to the vehicle registration form.
+
+    Required input:
+      Owner ID
+      Primary Owner (Y/N)
+
+    * NOTE: vehicle ID is taken from the parent form NewVehicleRegistration
+    
+    This form checks whether the owner ID entered exists in the database, and if
+    not, offers to open the AddPerson popup form. Once Owner ID is validated,
+    the SIN is placed on the NewVehicleRegistration form.
+    """
+    
     def create(self):
         self.vehicle_id = self.add(npyscreen.TitleText, name='Vehicle ID:', 
                                    begin_entry_at=25, editable=False,

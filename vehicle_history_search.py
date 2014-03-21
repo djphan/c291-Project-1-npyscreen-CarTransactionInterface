@@ -2,6 +2,18 @@ import npyscreen
 from npyscreen import wgwidget as widget
 
 class VehicleHistorySearch(npyscreen.FormBaseNew):
+    """
+    Form to search the database for a vehicle's history statistics.
+
+    Required input:
+      Serial No
+
+    Returns:
+      Serial No
+      Number of Sales
+      Average price
+      Number of tickets
+    """
     def set_up_exit_condition_handlers(self):
         super().set_up_exit_condition_handlers()
         self.how_exited_handers.update({
