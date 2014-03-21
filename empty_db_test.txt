@@ -18,14 +18,7 @@ Sellers are not being removed from db on transactions.
 
 Scenario 3: Driver Registering Officer: Driver Licence Reg
 1)
-When registering a new drivers licence you are taken back
-to the main menu. Not sure if this is ok. Nitpicking but 
-each scenario specifies explicitly when it should go back 
-to the main menu so may be worth changing.
-
-When you add a new person sin does not autopopulate. 
-<Carl>: Yes I agree that should be changed.
-
+Fixed a few minor things.
 Everything else here seems good.
 
 
@@ -45,3 +38,14 @@ Scenarion 5: searches
 results instead of 2. The licence number of the first 2 results are paired 
 accurately with the appropriate name but in the 3rd result that should not be 
 there no licence number is present, I get N/A.
+
+
+I can't seem to break any of the other searches so we should be good here.
+
+
+
+
+
+
+
+
