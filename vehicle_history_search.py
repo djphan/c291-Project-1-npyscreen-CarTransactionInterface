@@ -1,7 +1,7 @@
 import npyscreen
 import math
 
-class VehicleHistorySearch(npyscreen.ActionFormCarl):
+class VehicleHistorySearch(npyscreen.FormBaseNew):
     def create(self):
         self.serial_no = self.add(npyscreen.TitleText, name='Search by Vehicle Serial No',editable=False, begin_entry_at=20)
         self.user_query = self.add(npyscreen.TitleText, name="Search Query:",
