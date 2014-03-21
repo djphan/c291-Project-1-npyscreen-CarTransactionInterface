@@ -17,7 +17,8 @@ Sellers are not being removed from db on transactions.
 <Jon>: :( I will start looking into all the errors once I'm done a once through
         of the tests. 
 
-
+vehicle serial number is case sensitive I think this might be related to the
+removal problem.
 
 
 
