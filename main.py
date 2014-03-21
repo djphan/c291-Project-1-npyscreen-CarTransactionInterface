@@ -51,7 +51,8 @@ class MyApplication(npyscreen.NPSAppManaged):
                           columns=60)
         self.AP_default = None  # value for other forms to pass into class above
         self.AP_goto_NVR = False # boolean check for how to exit AddPerson
-
+        
+        self.AVID_default = None # pass serial to add owner subform in vehicle reg
 
 class MainMenuPopup(npyscreen.ActionPopup):
     """

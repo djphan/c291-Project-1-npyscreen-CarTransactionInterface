@@ -119,9 +119,10 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
 
             # If user selected ok forward them to the add person form.
             if response:
-                # Set the next form to be the people form. If the add person
-                # form exits with switchFormPrevious we should end up back here.
-                self.parentApp.setNextForm('ADDPERSON')
+                # Set the next form to be the people form. 
+                # set vehicle_id to match the specified value before switching
+                self.parentApp.AVID_default = self.vehicle_id.value
+                self.parentApp.switchForm('ADDPERSON')
             else:
                 return
             return False
