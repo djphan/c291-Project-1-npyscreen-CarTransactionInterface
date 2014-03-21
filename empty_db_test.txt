@@ -11,18 +11,13 @@ Sellers are not being removed from db on transactions.
 <Jon>: :( I will start looking into all the errors once I'm done a once through
         of the tests. 
 
-<<<<<<< HEAD
-vehicle serial number is case sensitive I think this might be related to the
-removal problem.
+vehicle serial number is case sensitive not sure if we should change this.
 
 
 
 
 
 
-
-=======
->>>>>>> 3cab3a918b525b488bcc89a26ff4482bb691398f
 
 ------------------------------------------------------------------------------
 Scenario 3: Driver Registering Officer: Driver Licence Reg
