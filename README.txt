@@ -3,70 +3,6 @@ cmput-291-project-1
 
 CMPUT 291 Project 1 (Python 3)
 
-__________________________
-COMMUNICATION / NOTES     |
-__________________________|
-Case: Check empty database set (for the min/max queries).
-
-Carl: According to the forums the readability of our source code will be evaluated as well, 
-including stuff like docstrings and comments. I'm going to start going through all our modules and
-removing notes we don't need anymore and commenting/docstringing the non-trivial sections.
-
-Dan: The due date got pushed back to Friday 6:00 PM (in case things come up) but lets finish early.
-https://eclass.srv.ualberta.ca/mod/forum/discuss.php?d=329146
-
-!!! Test cases are up:
-https://eclass.srv.ualberta.ca/mod/page/view.php?id=998610
-We will have to alter some things to comply with these new requirements. Nothing too major though.
-
-    Dan: Added some error checking to driver search, double check the work.
- 	vehicle_history_search.py   <- Dan (mostly done, can you guys run tests to see if you can break this form?)
- 	
-If you want to work on one of them please make a note here so we don't end up doing the same thing twice.
-
-Other TO-DO's:
-  Finish error checking/validation for:
-    ViolationRecord     <--} Dan: Primary key Updated. Can either of you use your database to test for additional
-                             Cases. Will double check date a little later.
-                           } will add people form where needed  
-    AutoTransaction     <--} once it's ready - Carl
-    
-                        < -- Dan/Carl: Double check date time error
-    NewVehicleRegistration?? (at least mostly done) <-- Jon (near completion)
-
-  <add other TODO's here if you have any>
-
-Jon's Notes:
-The new vehicle registration form is enforcing not null constraints on
-a few fields like year. Can you guys let me know if either of you have
-worked on this already. If not I will fix it up.
-
-Dan: Year may be accidently constrained. I can fix it up after I work on the other Stuff. 
-Let me know what other fields should allow for NULL values. Though type ID should be a
-foregin key and serial_no is a primary key.
-
-Carl: In the "Add Owner" popup, do we need the Vehicle ID field? Shouldn't it be the same 
-as the Serial No entered on the NVR form? Also we need to make sure there is exactly one 
-primary owner... any ideas   on how to do that? I'm thinking either grey out the 'primary'
-choice once a primary owner has been selected, or enforce that the first new owner entered 
-is the primary (Enter Primary Owner: ________ ) and then have an 'Add Secondary Owner'
-button?
-
-Final Tests:
-Dan P: New Vehicle Registration
-       20 03 14 New tests:
-            Primary owner needed
-            Vehicle Serial No Auto fills.
-            Update manual.
-            Previous errors tested
-
-       Error raised in: Owner form when SIN ID doesn't match (prompts to add a person via People Form)
-       Error raised in: Type ID
-       Error Raised in when primary owner not set first when attempting to add to the Owner Form
-       Vehicle entry Good
-       People entry Good
-       Owner entry Good
-
 #---------------------------------------------------------------------------------
 # Manual - Auto Transaction Database Interface
 #
@@ -100,13 +36,13 @@ Dan P: New Vehicle Registration
 # 
 # iii. After the user inputted the vehicle information, he can add owners
 # with the add owner button. The add owner button will then allow the user to
-# input the new owner's SIN, vehichle serial no, and primary owner status
+# input the new owner's SIN, vehichle serial no, and primary owner status.
 #
-# iv. The user can input the owners in any order, however he must have a primary
-# owner before the information is entered into the database. An error prompt
-# will raise if the user does not complete this action.
+# iv. The user can input the owners in any order, however a primary owner must 
+# be specified before the information is entered into the database. An error prompt
+# will be raised if the user does not complete this action.
 #
-# The owner form will auto fill the vehicle serial no for each entry for ease.
+# The owner form will auto fill the vehicle serial no for each entry.
 #
 # v. If the owner does not exist in the database (i.e. the SIN number is not in the database)
 # an error will be displayed and the user will be prompted to add the owner information
@@ -178,13 +114,33 @@ Dan P: New Vehicle Registration
 # if there were any previous values entered into the field.
 #
 # iii. The program will auto iterate the ticket number by querying your database
-# and incrementing by 1 the maximum value we can find.
+# and incrementing by the max value by 1..
 #
 # The following fields are required: (1) Violator SIN (2) Vehicle Serial No 
 # (3) Officer SIN and (4) Violation Type due to the constraints of the database.
 #
 # Both SIN numbers, Vehicle Serial No, and Violation type must match pre-entered 
 # data in the database. 
+
+#---------------------------------------------------------------------------------
+# iii.a. Driver Search
+#---------------------------------------------------------------------------------
+# Driver search allows the user to specify a name or Sin. The user parameter is then
+# used to query the drive_licence table for matching names/licence numbers. If the
+# name is found all relevant licence information is displayed. If the name is found
+# in people table but the person is not in the drive_licence table 
+# their licence #  is displayed with an N/A to indicate the lack of a licence.
+# 
+# i. The user can specify the way to search by tabbing into the "search by name/search 
+# by licence number" and pressing enter on the field.  
+# 
+# ii. The user can scroll through the results by tabbing into the the results field
+# and using the arrow keys to scroll through the results.
+# 
+# The search will display:
+# (1) Name, (2) Licence no, (3) Addresss, (4) Birthday, (5) Licence class, (6) Conditions,
+# (7) Expiring Date
+# 
 
 #---------------------------------------------------------------------------------
 # iii.b. Violation Search
@@ -200,7 +156,6 @@ Dan P: New Vehicle Registration
 # (2) the violator number/sin, (3) the vehicle id, (4) the officer id who issued the ticket
 # (5) the violation type (6) the violation date (7) the place (8) the description
 # (9) and the fine amount
-
 
 
 #---------------------------------------------------------------------------------
