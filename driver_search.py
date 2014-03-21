@@ -2,7 +2,7 @@ import npyscreen
 import curses
 from npyscreen import wgwidget as widget
 
-class DriverSearch(npyscreen.FormBaseNew):
+class DriverSearch(npyscreen.ActionFormCarl):
 
     # to have ESC --> go back:
     def set_up_exit_condition_handlers(self):

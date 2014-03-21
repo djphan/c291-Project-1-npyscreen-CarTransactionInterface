@@ -34,8 +34,7 @@ Fixed small issue but This has not yet been thoroughly tested.
 
 ------------------------------------------------------------------------------
 Scenarion 5: searches
-*** I have no back in driver search. Tab/arrow controls are wonky.
-
+<Jon>: fixed back button issue using Carl form.
 
 <Dan>: Note the esc function is only working in Driver Search. Not Q. It hasn't been ported to the
 other search modules
