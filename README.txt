@@ -74,12 +74,12 @@ Dan P: New Vehicle Registration
 # i. Login
 # ii. Database Entry Modules
 #     ii.a. New Vehicle Registration 
-#     ii.b.
+#     ii.b. Auto Transaction
 #     ii.c. Driver Licence Registration
 #     ii.d. Violation Record
 #     ii.e. People <- Not Done
 # iii. Search
-#     iii.a.
+#     iii.a. Driver Search
 #     iii.b. Violation Search
 #     iii.c. Vehicle Search History
 # iv. General Information with regards to the interface
@@ -115,6 +115,31 @@ Dan P: New Vehicle Registration
 #
 
 #---------------------------------------------------------------------------------
+# ii.b. Auto Transaction
+#---------------------------------------------------------------------------------
+# Auto transaction allows the user to enter the requisite data for auto sale
+# transactions.
+# 
+# i. The Vehicle serial number field must match a vehicle in the vehicle table
+# 
+# ii. The user must enter Seller and Buyer sins that match those in the people table.
+# The sins specified must be associated with the vehicle in the owner table.
+# 
+# iii. If the user wishes to add additional buyers they can be added via
+# the "Add buyer button" 
+# 
+# iv. The Transaction Id field is populated by incrementing the max transacion
+# id in the db.
+# 
+# v. Upon creating successfull transaction the seller is removed as an owner
+# of the vehicle in the owner table, the new owner is added and the transaction
+# details are entered into the auto sales table.
+# 
+# vi. All fields other than the date field must be populated b the user
+# to create a succesfull transaction.
+
+
+#---------------------------------------------------------------------------------
 # ii.c. Driver Licence Registration
 #---------------------------------------------------------------------------------
 # Driver Licence Registration allows the user to enter requisite data for entering
@@ -137,7 +162,6 @@ Dan P: New Vehicle Registration
 # user back to the interface to complete the licence entry.
 # 
 # iv. The following fields are required: (1) Licence no (2) SIN
-# 
 
 #---------------------------------------------------------------------------------
 # ii.d. Violation Record

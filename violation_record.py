@@ -9,18 +9,25 @@ class ViolationRecord(npyscreen.ActionForm):
         self.nextrely += 1
 
         self.sin = self.add(npyscreen.TitleText, name='Violator SIN:',begin_entry_at=20)
-        self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial No:', use_two_lines=False, begin_entry_at=20)
-        self.button10 = self.add(npyscreen.ButtonPress, name = "Use Vehicle's Primary Owner SIN")
+        self.vehicle_no = self.add(npyscreen.TitleText, name='Vehicle Serial No:', 
+            use_two_lines=False, begin_entry_at=20)
+        self.button10 = self.add(npyscreen.ButtonPress, name = 
+            "Use Vehicle's Primary Owner SIN")
         self.button10.whenPressed = self.button_press_primaryid
-        self.officer_no = self.add(npyscreen.TitleText, name='Officer ID:', begin_entry_at=20)
-        self.violation_type = self.add(npyscreen.TitleText, name='Violation Type:', begin_entry_at=20)
-        self.date    = self.add(npyscreen.TitleDateCombo, name='Date:', begin_entry_at=20)
-        self.place = self.add(npyscreen.TitleText, name='Place:',begin_entry_at=20)
+        self.officer_no = self.add(npyscreen.TitleText, name='Officer ID:', 
+            begin_entry_at=20)
+        self.violation_type = self.add(npyscreen.TitleText, 
+            name='Violation Type:', begin_entry_at=20)
+        self.date    = self.add(npyscreen.TitleDateCombo, name='Date:', 
+            begin_entry_at=20)
+        self.place = self.add(npyscreen.TitleText, name='Place:', 
+            begin_entry_at=20)
         self.nextrely+=1
         self.d_title    = self.add(npyscreen.TitleFixedText, use_two_lines=False,
                                 name="Description:", begin_entry_at=20,
                                 editable=False, color="STANDOUT")
-        self.description = self.add(npyscreen.MultiLineEdit, name='Description:', relx=22, rely=12)        
+        self.description = self.add(npyscreen.MultiLineEdit, name='Description:', 
+            relx=22, rely=12)        
 
         # get maximum current ticket_id
         query = "SELECT MAX(ticket_no) FROM ticket"
