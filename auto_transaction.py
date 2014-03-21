@@ -244,7 +244,7 @@ class AutoTransaction(npyscreen.FormBaseNew):
        
 
         # Remove old owner(s) from table
-        values = {"vehicle_id":self.vehicle.value}
+        values = {"vehicle_id":self.vehicle.value.ljust(15, ' ')}
         prepare = "DELETE FROM owner WHERE vehicle_id = :vehicle_id"
         error = self.parentApp.db.delete(values, prepare)
         if error:
