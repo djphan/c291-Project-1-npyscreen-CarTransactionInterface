@@ -25,7 +25,12 @@ class ViolationRecord(npyscreen.ActionForm):
         # get maximum current ticket_id
         query = "SELECT MAX(ticket_no) FROM ticket"
         # set t_id to one greater
-        self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
+        # try to autoincrement the highest t_id in the db
+        # if no ticket exists in the db set the initial t_id to 100
+        try:
+            self.t_id.value = str(1 + self.parentApp.db.query({}, query)[0][0])
+        except TypeError:
+            self.t_id.value = 100
 
     def process_information(self):
         self.entries = {'t_id' : self.t_id.value,

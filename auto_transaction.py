@@ -241,6 +241,7 @@ class AutoTransaction(npyscreen.FormBaseNew):
                                      form_color='STANDOUT', wrap=True,
                                      wide=False, editw=1)
             return
+       
 
         # Remove old owner(s) from table
         values = {"vehicle_id":self.vehicle.value.ljust(15, ' ')}

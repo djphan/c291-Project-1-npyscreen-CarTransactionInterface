@@ -1,27 +1,57 @@
+------------------------------------------------------------------------------
 Scenario 1. No issues found.
 
-
-
-
-
-
-
+------------------------------------------------------------------------------
 Scenario 2: Registering officer: auto transaction.
 1)
 Sellers are not being removed from db on transactions.
 
+<Carl>: Same for me... I can't figure out why that's happening though.
+        The code to do so is in there. :/
+<Jon>: :( I will start looking into all the errors once I'm done a once through
+        of the tests. 
+
+vehicle serial number is case sensitive not sure if we should change this.
 
 
 
+
+
+
+
+------------------------------------------------------------------------------
 Scenario 3: Driver Registering Officer: Driver Licence Reg
 1)
-When registering a new drivers licence you are taken back
-to the main menu. Not sure if this is ok. Nitpicking but 
-each scenario specifies explicitly when it should go back 
-to the main menu so may be worth changing.
-
+Fixed a few minor things.
 Everything else here seems good.
 
 
+------------------------------------------------------------------------------
 Scenario 4: Police Officer: Violation Record
 1) violation record crashes on entry with empty tables.
+
+Fixed small issue but This has not yet been thoroughly tested.
+
+------------------------------------------------------------------------------
+Scenarion 5: searches
+*** I have no back in driver search. Tab/arrow controls are wonky.
+
+
+<Dan>: Note the esc function is only working in Driver Search. Not Q. It hasn't been ported to the
+other search modules
+
+1) Found a weird issue on on driver search, I have 3 people licenced in total
+2 are named Jon, 1 is named Jim, when I search by the name Jon, I am getting 3
+results instead of 2. The licence number of the first 2 results are paired 
+accurately with the appropriate name but in the 3rd result that should not be 
+there no licence number is present, I get N/A.
+
+I can't seem to break any of the other searches so we should be good here.
+
+
+
+
+
+
+
+

@@ -184,10 +184,9 @@ class DriverLicenceRegistration(npyscreen.ActionForm):
         self.photo.value = ''
         self.issuing_date.value = ''
         self.expiring_date.value = ''
-        self.parentApp.switchFormPrevious() # exit
 
     def on_cancel(self):
-        # Just clear the form and exit back to main menu.
+        # Clear the form and exit back to main menu.
         self.licence_no.value = ''
         self.sin.value = ''
         self.licence_class.value = ''
