@@ -1,3 +1,4 @@
+------------------------------------------------------------------------------
 Scenario 1. No issues found.
 
 
@@ -6,6 +7,7 @@ Scenario 1. No issues found.
 
 
 
+------------------------------------------------------------------------------
 Scenario 2: Registering officer: auto transaction.
 1)
 Sellers are not being removed from db on transactions.
@@ -16,20 +18,41 @@ Sellers are not being removed from db on transactions.
         of the tests. 
 
 
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------
 Scenario 3: Driver Registering Officer: Driver Licence Reg
 1)
 Fixed a few minor things.
 Everything else here seems good.
 
 
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------
 Scenario 4: Police Officer: Violation Record
 1) violation record crashes on entry with empty tables.
 
-<Carl>: One of you changed the MAX statement in auto_transaction... 
-        Probably this is the same bug here?
-<Jon>: I changed it, will do the same here once im done testing.
+Fixed small issue but This has not yet been thoroughly tested.
 
 
+
+
+
+
+------------------------------------------------------------------------------
 Scenarion 5: searches
 *** I have no back in driver search. Tab/arrow controls are wonky.
 
